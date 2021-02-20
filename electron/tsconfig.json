@@ -1,6 +1,8 @@
 {
   "compileOnSave": true,
-  "include": ["./src/*"],
+  "include": [
+    "./src/*"
+  ],
   "compilerOptions": {
     "outDir": "./build",
     "importHelpers": true,

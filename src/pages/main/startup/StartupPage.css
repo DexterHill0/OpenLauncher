@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+.ol-startup-main-content {
+	--background: var(--primary-dark);
+	overflow: hidden;
+	user-select: none;
+}
+
+.ol-centre-box {
+	position: absolute;
+	min-height: 23rem;
+	min-width: 40rem;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--tertiary-dark);
+}
+
+.ol-startup-loading {
+	position: absolute;
+	width: calc(100% - 1.2rem);
+	bottom: 0.5rem;
+	margin-right: auto;
+	margin-left: auto;
+	left: 0px;
+	right: 0px;
+	border-radius: 2px;
+	--progress-background: var(--ion-color-danger);
+	--buffer-background: #523c3f;
+}
+
+.ol-starup-loading-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-size: 2.5rem;
+}
+
+.ol-dont-get-me-sued {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-size: 0.8rem;
+	position: fixed;
+	bottom: 5px;
+	left: 10px;
+	opacity: 0.5;
+}

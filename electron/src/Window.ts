@@ -16,9 +16,13 @@ interface Options {
 	maximizable?: boolean,
 	resizable?: boolean,
 
+	minWidth?: number,
+	minHeight?: number,
+
 	webPreferences?: {
 		nodeIntegration?: boolean,
 		devTools?: boolean,
+		enableRemoteModule?: boolean,
 	}
 }
 
@@ -31,14 +35,22 @@ export class Window {
 	static events = {
 		SPLASH_SCREEN_TEXT_CHANGE: "OL-SPLASH_SCREEN_TEXT_CHANGE",
 
-		WINDOW_CLOSED: "OL-WINDOW_CLOSED",
+		WINDOW_WILL_CLOSE: "OL-WINDOW-WILL-CLOSE",
 
 		UPDATE_CHECK_STARTED: "OL-CHECKING_FOR_UPDATES",
 		UPDATE_CHECK_FINISHED: "OL-CHECKED_FOR_UPDATES",
 
-		APP_READY_TO_START: "OL-APP_START_SPLASH_CLOSE",
+		DOCK_BOUNCE: "OL-DOCK-BOUNCE",
+
+		RPC_SET_ACTIVITY: "OL-SET-RPC-ACTIVITY",
+		RPC_HAS_INIT: "OL-RPC-HAS-INIT",
+
+		REQUESTS_POST: "OL-REQUESTS-POST",
+		REQUESTS_GET: "OL-REQUESTS-GET",
+		REQUEST_COMPLETE: "OL-REQUEST-COMPLETE",
 	}
-	activeEvents: { [key: string]: () => void; }[];
+
+	activeEvents: { [key: string]: (...args: any[]) => void; }[];
 
 	constructor(options?: Options) {
 		this.options = options;
@@ -52,34 +64,27 @@ export class Window {
 		this.isInitialised = true;
 	}
 
-	on(event: string, fn: () => any, isExternal?: boolean) {
+	on(event: string, fn: (...args: any[]) => any) {
 		this.activeEvents.push({
-			[isExternal ? "EXTERNAL_" + event : event]: fn
+			[event]: fn
 		});
-		if (isExternal) ipcMain.on(event, fn);
+		ipcMain.on(event, fn);
 	}
-	off(event: string, isExternal?: boolean, fn?: () => any) {
+	off(event: string, fn?: (...args: any[]) => any) {
 		let e = this.activeEvents.find((data) => {
-			if (data[event] || data["EXTERNAL_" + event]) return data;
+			if (data[event]) return data;
 		});
 		this.activeEvents.splice(
 			this.activeEvents.indexOf(e)
 		);
-		if (isExternal) ipcMain.off(event, e[event]);
+		ipcMain.off(event, fn ? fn : e[event]);
 	}
-	once(event: string, fn: () => any, isExternal?: boolean) {
-		this.activeEvents.push({
-			[isExternal ? "EXTERNAL_" + event : event]: fn
-		});
-		if (isExternal) ipcMain.once(event, fn);
+	once(event: string, fn: (...args: any[]) => any) {
+		ipcMain.once(event, fn);
 	}
 
-	emit(event: string, isExternal?: Boolean, ...args: any[]) {
-		this.activeEvents.forEach(e => {
-			if (!Object.keys(e)[0].startsWith("EXTERNAL_")) e[event].bind(this).call(); //If it's an external event (i.e. `ipcMain`) then don't run callback
-		});
-
-		if (isExternal) this.window.webContents.send(event, args);
+	emit(event: string, ...args: any[]) {
+		this.window.webContents.send(event, args);
 	}
 
 	destroy(triggerEvent?: string) {
@@ -90,12 +95,16 @@ export class Window {
 			return;
 		}
 
+		this.emit(Window.events.WINDOW_WILL_CLOSE);
 		this.window.destroy();
-		this.emit(Window.events.WINDOW_CLOSED);
 	}
 
 	show() {
 		this.window.show();
+	}
+
+	devTools() {
+		this.window.webContents.openDevTools();
 	}
 }
 

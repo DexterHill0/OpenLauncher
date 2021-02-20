@@ -1,4 +1,6 @@
-import { app, BrowserWindow } from "electron";
+import { app } from "electron";
+import Discord from "./Discord";
+import Requests from "./Requests";
 import { Window } from "./Window";
 
 let mainWindow = null;
@@ -9,14 +11,19 @@ async function createWindow() {
 	mainWindow = new Window({
 		height: 920,
 		width: 1600,
+		minWidth: 1000,
+		minHeight: 660,
+
 		url: "http://localhost:8100/",
 
 		show: false,
 		titleBarStyle: "hiddenInset",
+		movable: true,
 
 		webPreferences: {
 			nodeIntegration: true,
 			devTools: true,
+			enableRemoteModule: true,
 		}
 	});
 	mainWindow.init();
@@ -41,29 +48,42 @@ async function createWindow() {
 	});
 	await splashScreen.init();
 
-	splashScreen.once(Window.events.APP_READY_TO_START, () => {
-		splashScreen.destroy();
-		mainWindow.show();
-	}, true);
+	mainWindow.on(Window.events.DOCK_BOUNCE, () => {
+		app.dock.bounce("critical");
+	});
 
-	mainWindow.emit(Window.events.UPDATE_CHECK_STARTED, true);
-	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, true, "CHECKING FOR UPDATES");
+	mainWindow.emit(Window.events.UPDATE_CHECK_STARTED);
+	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, "CHECKING FOR UPDATES");
 
 	await checkForUpdates();
 
-	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, true, "STARTING");
-	mainWindow.emit(Window.events.UPDATE_CHECK_FINISHED, true);
+	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, "STARTING");
+	mainWindow.emit(Window.events.UPDATE_CHECK_FINISHED);
+
+	splashScreen.destroy();
+	mainWindow.show();
+
+	mainWindow.devTools();
 
 }
-app.on('ready', createWindow);
 
+function setupDiscord() {
+	let d = new Discord();
+	d.bindEvents(mainWindow);
 
+	d.startRPC();
+}
+
+function setupRequests() {
+	let r = new Requests();
+	r.bindEvents(mainWindow);
+}
 
 function checkForUpdates() {
 	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve(null);
-		}, 7000);
+		}, 100);
 	});
 }
 
@@ -78,4 +98,11 @@ app.on('activate', function () {
 	if (mainWindow === null) {
 		createWindow();
 	}
+});
+
+app.on('ready', () => {
+	createWindow();
+
+	setupDiscord();
+	setupRequests();
 });

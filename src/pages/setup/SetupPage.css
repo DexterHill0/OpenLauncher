@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+.ol-setup-main-content {
+	--background: var(--primary-dark);
+	overflow: hidden;
+	user-select: none;
+}
+
+.ol-setup-centre-box {
+	overflow: hidden;
+	position: absolute;
+	min-height: 23rem;
+	min-width: 40rem;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 0.5rem;
+	background-color: var(--tertiary-dark);
+}
+
+.ol-setup-slides {
+	position: relative;
+	text-align: center;
+}
+
+.ol-setup-single-slide {
+	width: 100%;
+	height: 100%;
+}
+
+.ol-setup-progress {
+	width: 100%;
+	--bar-background-active: var(--accent-colour);
+	--bar-background: var(--tertiary-dark);
+	--knob-size: 0;
+	--height: 0.0rem;
+	--bar-height: 0.25rem;
+	--bar-border-radius: 0.5rem;
+	padding: 0.15rem 0 0.7rem 0;
+}
+
+.ol-setup-thanks {
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.9rem;
+	top: 8%;
+	left: 50%;
+	width: 100%;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.ol-setup-launcher-select-text {
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-size: 1.4rem;
+	top: 18%;
+	left: 50%;
+	width: 100%;
+	font-style: italic;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.ol-setup-launcher-checkbox {
+	--background: var(--checkbox-bg);
+	--background-checked: var(--accent-colour);
+	--border-color: var(--icon-colour);
+	--border-color-checked: var(--accent-colour);
+}
+
+@keyframes shake_arrow {
+	0% {
+		right: -5px;
+	}
+	50% {
+		right: 5px;
+	}
+	100% {
+		right: -5px;
+	}
+}
+
+.ol-setup-continue {
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.2rem;
+	--background: rgba(0, 0, 0, 0);
+	top: 50%;
+	right: -5px;
+	transform: translateY(-50%);
+	cursor: pointer;
+}
+
+.ol-setup-continue-icon {
+	width: 2rem;
+	height: 2rem;
+	color: var(--ion-text-color);
+}
+
+.shake-input {
+	animation: shake_arrow 1.2s ease-in-out 0s infinite;
+}
+
+.ol-setup-launcher-select-container {
+	text-align: left !important;
+	position: absolute;
+	top: 50%;
+	left: 18%;
+	transform: translate(-50%, -50%);
+}
+
+.ol-setup-launcher-select-button {
+	--background: rgba(0, 0, 0, 0);
+	--ripple-color: transparent;
+	--background-hover: transparent !important;
+	height: 2.6rem;
+}
+
+.ol-setup-launcher-select-box-text {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.1rem;
+}
+
+.ol-setup-back {
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.2rem;
+	--background: rgba(0, 0, 0, 0);
+	top: 2%;
+	right: 77%;
+	transform: translateX(-50%);
+	margin: 0 auto;
+	cursor: pointer;
+	--background: var(--tertiary-dark);
+	border-bottom-right-radius: 1rem;
+	z-index: 100;
+}
+
+
+@keyframes glow {
+	0% {
+		box-shadow: none;
+	}
+	50% {
+		box-shadow: 0px 0px 10px 2px var(--ion-color-danger);
+	}
+	100% {
+		box-shadow: none;
+	}
+}
+
+.glow-input {
+	animation: glow 1.5s ease-in-out 0s ;
+}
+
+.ol-dont-get-me-sued {
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 200;
+	font-size: 0.8rem;
+	position: fixed;
+	bottom: 5px;
+	left: 10px;
+	opacity: 0.5;
+}
+
+.ol-finished {
+	width: 100%;
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.9rem;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.ol-setup-link-finally {
+	width: 100%;
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.7rem;
+	top: 32%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.ol-finished-remember {
+	position: absolute;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1rem;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	pointer-events: none;
+	font-style: italic;
+}
+
+.ol-page-container {
+	height: 100%;
+}
+
+.ol-icon {
+	color: var(--ion-text-color)
+}
