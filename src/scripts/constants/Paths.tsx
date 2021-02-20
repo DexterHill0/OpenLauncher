@@ -1,60 +1,83 @@
 import React from 'react';
 
+import { IniKey } from "./IniKeys"
 import { appDataPath, userDirectory, getOS } from "../../utils/Utils";
 
 export const STEAM_PATHS = [
 	{
-		"iniKey": "data",
+		"iniKey": IniKey.data,
 
 		"unsup-os": "",
 		"win": "C:/Program Files (x86)/Steam/steamapps",
 		"osx": `${appDataPath}/Steam/SteamApps/`,
 
-		"checkPathReg": /<>/,
-		"notFound": <></>,
+		"checkPathReg": /(?!(\/|\\)Steam(\/|\\)steamapps(\/|\\).+)((\/|\\)Steam(\/|\\)steamapps)[/\\]?/, //This regex is compared to the users input if the above path could not be found
 	},
 	{
-		"iniKey": "games",
+		"iniKey": IniKey.games,
 
 		"unsup-os": "",
 		"win": "C:/Program Files (x86)/Steam/steamapps/common",
 		"osx": `${appDataPath}/Steam/SteamApps/common/`,
 
 		"checkPathReg": undefined, //Because this is only 1 directory down from the above path there is not point in getting the user to enter the path
-		"notFound": undefined,
 	}
 ];
 
 export const EPIC_PATHS = [
 	{
-		"iniKey": "gameusersettings", //What key the path goes under in the ini file
+		"iniKey": IniKey.gameusersettings, //What key the path goes under in the ini file
 
 		"unsup-os": "",
 		"win": `${appDataPath}/Local/EpicGamesLauncher/Saved/Config/Windows/GameUserSettings.ini`,
 		"osx": `${userDirectory}/Library/Preferences/Unreal Engine/EpicGamesLauncher/Mac/GameUserSettings.ini`,
 
-		"checkPathReg": /(\/Epic Games)[/]?/, //This regex is compared to the users input if the above path could not be found
-		"notFound": undefined, //If the file is not found it doesn't matter because we will get a refresh token from servers instead
+		"checkPathReg": undefined, //File doesn't matter too much, just get code online instead 
 	},
 	{
-		"iniKey": "games",
+		"iniKey": IniKey.games,
 
 		"unsup-os": "",
 		"win": "C:/Program Files/Epic Games/",
 		"osx": "/Users/Shared/Epic Games/",
 
-		"checkPathReg": /(\/Epic Games)[/]?/,
+		"checkPathReg": /(?!(\/|\\)Epic Games(\/|\\).+)((\/|\\)Epic Games)[/\\]?/,
 		"notFound": <div>Could not locate game install directory. Please enter the install location below.</div>,
 	},
 	{
-		"iniKey": "data",
+		"iniKey": IniKey.data,
 
 		"unsup-os": "",
 		"win": `C:/ProgramData/Epic/EpicGamesLauncher/Data/Catalog/catcache.bin`,
 		"osx": `${appDataPath}/Epic/EpicGamesLauncher/Data/Catalog/catcache.bin`,
 
-		"checkPathReg": /([/]?Epic)?[/]?(EpicGamesLauncher\/Data\/)(Catalog)?[/]?(catcache\.bin)?/,
-		"notFound": <div>Please enter the path to <code>/Epic/EpicGamesLauncher/</code>.<br />It is usually located under <code>{getOS() === "win" ? "Program Data" : "Application Support"}</code>.</div>,
+		"checkPathReg": /([/\\]?Epic)?[/\\]?(EpicGamesLauncher(\/|\\)Data(\/|\\))(Catalog)?[/\\]?(catcache\.bin)?/,
 	}
 ];
+
+/**
+ * Gets the `iniKey` given a path
+ */
+export function getKeyByPath(path: string, pathArray: any[]): string {
+	const os = getOS();
+
+	return pathArray.map(p => {
+		if (p[os] === path) {
+			return path;
+		}
+	})[0] || ""; //I can assume there is only going to be 1 exact match
+}
+
+/**
+ * Gets the OS specific path given an `iniKey`
+ */
+export function getPathByKey(key: string, pathArray: any[]): string {
+	const os = getOS();
+
+	return pathArray.map(p => {
+		if (p.iniKey === key) {
+			return p[os];
+		}
+	})[0] || "";
+}
 

@@ -6,23 +6,29 @@ const ipcRenderer = window.require("electron").ipcRenderer;
 
 class Requests {
 
-    static post(url: string, data: object, success: (data: any) => void, error?: (err: any) => void): void {
+    static post(url: string, data: object): Promise<any> {
         log.log(`Senging POST request to: ${url}`);
 
-        ipcRenderer.once(Events.REQUEST_COMPLETE, (_event: any, data: any) => {
-            data = data[0];
+        const prom = new Promise<any>((resolve, reject) => {
 
-            if (data.hasError) {
-                error && error(data.error);
-                log.log("Error while sending POST request!");
-                return;
-            }
+            ipcRenderer.once(Events.REQUEST_COMPLETE, (_event: any, data: any) => {
+                data = data[0];
 
-            log.log("POST request complete!");
-            success(data);
-        });
+                if (data.hasError) {
+                    reject(data.error);
+                    log.log("Error while sending POST request!");
+                    return;
+                }
 
-        ipcRenderer.send(Events.REQUESTS_POST, { "url": url, "data": data })
+                log.log("POST request complete!");
+                resolve(data);
+            });
+
+        })
+
+        ipcRenderer.send(Events.REQUESTS_POST, { "url": url, "data": data });
+
+        return prom;
     }
 
 }

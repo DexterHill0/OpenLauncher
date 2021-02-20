@@ -1,9 +1,8 @@
 import React from 'react';
 
-import $ from "jquery";
-
-import "./SlideStyles.css"
+import "./SlideComponentStyles.css"
 import { IonGrid, IonRow } from '@ionic/react';
+import { useState } from 'react';
 
 interface Props {
 	error: JSX.Element,
@@ -13,6 +12,7 @@ interface Props {
 }
 
 const ErrorSlide: React.FC<Props> = (props) => {
+	const [input, setInput] = useState("");
 
 	return (
 		<div className="ol-error-slide-container">
@@ -26,12 +26,10 @@ const ErrorSlide: React.FC<Props> = (props) => {
 							{props.error}
 						</div>
 						<div className="ol-error-field">
-							<input className="ol-error-path-input ol-error-input" type="text" name="path" placeholder="Type here"></input>
+							<input onChange={(e) => setInput(e.target.value)} className="ol-error-path-input ol-error-input" type="text" name="path" placeholder="Type here"></input>
 						</div>
 						<div className="ol-error-field">
-							<input onClick={(e) => {
-								props.onContinue($(e.target).parents().eq(1).find(".ol-form-path-input").val());
-							}} className="ol-error-path-submit ol-error-input" type="submit" value="Continue"></input>
+							<input onClick={() => props.onContinue(input)} className="ol-error-path-submit ol-error-input" type="submit" value="Continue"></input>
 						</div>
 					</div>
 				</IonRow>

@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { person, lockClosed } from 'ionicons/icons';
-
-import $ from "jquery";
 
 import "./SignIn.css"
 
@@ -13,6 +11,8 @@ interface Props {
 }
 
 const SignInForm: React.FC<Props> = (props) => {
+    const [inputs, setInput] = useState({ username: "", password: "" })
+
     return (
         <>
             <div className={`ol-signin-form-container ${props.class}`}>
@@ -20,22 +20,18 @@ const SignInForm: React.FC<Props> = (props) => {
                     <label htmlFor="ol-signin-username">
                         <IonIcon class="ol-signin-icons" icon={person}></IonIcon>
                     </label>
-                    <input className="ol-signin-username ol-signin-input" type="text" name="username" placeholder="Username" required></input>
+                    <input onChange={(e) => setInput({ ...inputs, username: e.target.value })} className="ol-signin-username ol-signin-input" type="text" name="username" placeholder="Username" required></input>
                 </div>
 
                 <div className="ol-signin-field ol-signin-field-password">
                     <label htmlFor="ol-signin-password">
                         <IonIcon class="ol-signin-icons" icon={lockClosed}></IonIcon>
                     </label>
-                    <input className="ol-signin-password ol-signin-input" type="password" name="password" placeholder="Password" required></input>
+                    <input onChange={(e) => setInput({ ...inputs, password: e.target.value })} className="ol-signin-password ol-signin-input" type="password" name="password" placeholder="Password" required></input>
                 </div>
 
                 <div className="ol-signin-continue">
-                    <input onClick={(e) => {
-                        //I would use states but because the IonSlides fix instances this component, I have to use JQuery instead
-                        let parent = $(e.target).parents().eq(1);
-                        props.onSignIn(parent.find(".ol-form-username").val(), parent.find(".ol-form-password").val())
-                    }} className="ol-signin-submit ol-signin-input" type="submit" value={props.inputText ? props.inputText : "Sign In"}></input>
+                    <input onClick={(e) => props.onSignIn(inputs.username, inputs.password)} className="ol-signin-submit ol-signin-input" type="submit" value={props.inputText ? props.inputText : "Sign In"}></input>
                 </div>
             </div>
         </>

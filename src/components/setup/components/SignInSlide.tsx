@@ -1,9 +1,9 @@
 import React from 'react';
-import { IonGrid, IonSlide, IonRow } from '@ionic/react';
+import { IonGrid, IonRow } from '@ionic/react';
 
 import SignInForm from '../../inputs/SignIn';
 
-import "./SlideStyles.css"
+import "./SlideComponentStyles.css"
 
 interface Props {
 	onSignIn: (username: any, password: any) => void,
@@ -23,7 +23,7 @@ const SignInSlide: React.FC<Props> = (props) => {
 				</IonRow>
 				<IonRow class="ol-slide-grid-row">
 					<SignInForm
-						onSignIn={(us, ps) => props.onSignIn(us, ps)}
+						onSignIn={(us, pw) => props.onSignIn(us, pw)}
 						inputText={props.inputText}
 					></SignInForm>
 				</IonRow>

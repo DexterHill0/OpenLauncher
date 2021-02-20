@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IonContent, IonLabel, IonIcon, IonCheckbox, IonItem, IonText, IonRange, IonSlides, IonSlide } from '@ionic/react';
 import { chevronForward, chevronBack } from 'ionicons/icons';
 
@@ -10,8 +10,6 @@ import Epic from "../../scripts/launchers/EpicGames";
 import './SetupPage.css';
 import Steam from '../../scripts/launchers/Steam';
 
-import ErrorSlide from '../../components/setup/components/ErrorSlide';
-import SignInSlide from '../../components/setup/components/SignInSlide';
 import SteamSlide from '../../components/setup/SteamSlide';
 
 const fs = window.require("fs");
@@ -19,20 +17,30 @@ const fs = window.require("fs");
 const log = setupLogger();
 
 
-const SetupPage = () => {
-	const [selected, setSelected] = useState<{ [key: string]: boolean }>({ "epic": false, "steam": false });
+//I can use these to have a text representation of the slides the user "has access to"
+//These have to be in the same order as the slides in the DOM
+enum SlideIndex {
+	"LAUNCHER_CHOOSE",
+	"STEAM",
+	"EPIC",
+}
 
-	const [pages, setPages] = useState<JSX.Element[]>([]);
+//Maps the launcher name to the slide index
+const LauncherMap: { [key: string]: SlideIndex } = {
+	"steam": SlideIndex.STEAM,
+	"epic": SlideIndex.EPIC,
+}
+
+
+const SetupPage = () => {
+	const slideRef = useRef<HTMLIonSlidesElement>(null)
+
+	const [selected, setSelected] = useState<{ [key: string]: boolean }>({ "epic": false, "steam": false });
 
 	const [stepAmount, setStepAmount] = useState(0);
 	const [percent, stepPercent] = useState(0);
 
-	const [index, setIndex] = useState(0);
-
-	const Launchers: { [key: string]: any } = {
-		"epic": Epic,
-		"steam": Steam,
-	}
+	const allowedSlides = [SlideIndex.LAUNCHER_CHOOSE,]
 
 
 	useEffect(() => {
@@ -49,8 +57,8 @@ const SetupPage = () => {
 	}, [selected]);
 
 	useEffect(() => {
-		changeSlide("next")
-	}, [pages]);
+		animateSlider("next");
+	}, [stepAmount]); //The only time this changes is when the arrow is clicked so it is safe to assume the user is not the next slide
 
 	const firstLoadSetup = (): void => { //Does setup that only needs to be performed once
 		if (getOS() === "unsup-os") {
@@ -81,48 +89,49 @@ const SetupPage = () => {
 	const startSetup = (): void => {
 		clearConfig();
 
-		const pages: JSX.Element[] = [];
-
-		//There's gotta be a better way of doing this
 		Object.keys(selected).forEach(k => {
 			if (selected[k]) {
+				allowedSlides.push(LauncherMap[k]);
+			}
+		});
 
-				pages.push(<SignInSlide onSignIn={(us, pw) => Launchers[k].signIn(us, pw)} onSkip={() => console.log("a")} logo={Launchers[k].logo}></SignInSlide>)
+		if (slideRef.current === null) return;
 
-				Object.values(Launchers[k].doSetup()).map((v: any) => {
-					if (!v.isValid) {
-						pages.push(<ErrorSlide error={v.error} onContinue={p => console.log("b")} logo={Launchers[k].logo}></ErrorSlide>)
-					}
-				})
+		slideRef.current.getSwiper().then(sw => {
+			setStepAmount(100 / sw.slides.length);
+		});
 
+		changeSlide("next");
+	}
+
+	const changeSlide = (dir: "next" | "prev") => {
+		if (slideRef.current === null) return;
+
+		slideRef.current.getSwiper().then(sw => {
+			const index = sw.activeIndex;
+
+			if (dir === "next") {
+				if (index + 1 > sw.slides.length) return;
+
+				sw.slideTo(allowedSlides[index + 1]); //Slide to the next allowed slide
+			}
+			else {
+				if (index - 1 < 0) return;
+
+				sw.slideTo(allowedSlides[index - 1]); //Slide to the previous allowed slide
 			}
 
 		});
-
-		setStepAmount(100 / pages.length);
-		setPages(pages);
 	}
 
-
-	function changeSlide(dir: "next" | "prev"): void {
-		if (dir === "next") {
-			if (index + 1 > pages.length) return;
-			setIndex(index + 1);
-		}
-		else {
-			if (index - 1 < 0) return;
-			setIndex(index - 1);
-		}
-	}
-
-	const slideSlider = (index: number, indexLatest: number): void => {
+	const animateSlider = (dir: "next" | "prev"): void => {
 		//JQuery doesn't seem to support getting shadow root so this is the only way, sadly
 		let el: any = document.getElementsByClassName("ol-setup-progress")[0].shadowRoot;
-		if (!el) return;
+		if (!el || !el.children[1]) return;
 
 		el = el.children[1].children[1]; //Get the active part of the slider
 
-		if (index > indexLatest) { //This is equivalent to moving the slides to the left
+		if (dir === "next") { //This is equivalent to moving the slides to the left
 			//However, I can still animate it with JQuery as long as I have found the element beforehand
 			$(el).animate({
 				//100% is not filled, 0% is filled, so to work out how much to show I must subtract from 100
@@ -146,13 +155,13 @@ const SetupPage = () => {
 			<div className="ol-setup-centre-box">
 				<IonRange class="ol-setup-progress" value={percent}></IonRange>
 
-				<IonItem class="ol-setup-back" lines="none" onClick={() => changeSlide("prev")}>
+				<IonItem class="ol-setup-back" lines="none" >
 					<IonIcon icon={chevronBack} class="ol-icon"></IonIcon>
 					<IonLabel>Back</IonLabel>
 				</IonItem>
 
 
-				<IonSlides class="ol-setup-slides">
+				<IonSlides class="ol-setup-slides" ref={slideRef}>
 					<IonSlide class="ol-setup-single-slide">
 						<div className="ol-setup-thanks">
 							Thanks for using OpenLauncher!
@@ -183,7 +192,14 @@ const SetupPage = () => {
 						</IonItem>
 					</IonSlide>
 
-					<SteamSlide></SteamSlide>
+					<SteamSlide
+						slideDidChange={(dir) => animateSlider(dir)}
+						reachedEnd={() => changeSlide("next")}
+					></SteamSlide>
+
+					<IonSlide>
+						TEST
+					</IonSlide>
 				</IonSlides>
 			</div>
 			<IonLabel class="ol-dont-get-me-sued">All product names, logos, and brands are property of their respective owners in the United Kingdom and/or other countries. All company, product and service names used are for identification purposes only. Use of these names, logos, and brands does not imply endorsement.</IonLabel>

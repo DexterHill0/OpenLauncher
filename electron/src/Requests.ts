@@ -47,7 +47,7 @@ class Requests {
 	get(args: any): void {
 	}
 
-	//Converst most of the response into an object `emit` can serialise
+	//Converts most of the response into an object `emit` can serialise
 	toSerialisableData(resp: Response, body: any) {
 		let headers = {};
 		resp.headers.forEach((val, key) => headers[key] = val)
