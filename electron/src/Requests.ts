@@ -64,22 +64,3 @@ class Requests {
 }
 
 export default Requests;
-
-
-
-	// const formData = {
-	// 	"username": "bobski22",
-	// 	"donotcache": (Date.now() * 1000).toString(16),
-	// }
-
-	// $.ajax({
-	// 	type: "POST",
-	// 	url: "https://store.steampowered.com/login/getrsakey",
-	// 	data: formData,
-	// 	success: function (data) {
-	// 		console.log(data)
-	// 	},
-	// 	error: function (err) {
-	// 		console.log(err)
-	// 	}
-	// });
