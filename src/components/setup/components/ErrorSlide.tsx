@@ -29,7 +29,7 @@ const ErrorSlide: React.FC<Props> = (props) => {
 							<input onChange={(e) => setInput(e.target.value)} className="ol-error-path-input ol-error-input" type="text" name="path" placeholder="Type here"></input>
 						</div>
 						<div className="ol-error-field">
-							<input onClick={() => props.onContinue(input)} className="ol-error-path-submit ol-error-input" type="submit" value="Continue"></input>
+							<input onClick={() => props.onContinue(input)} className="ol-error-path-submit ol-error-input ol-input-button" type="submit" value="Continue"></input>
 						</div>
 					</div>
 				</IonRow>

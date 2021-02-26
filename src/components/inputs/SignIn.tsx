@@ -31,7 +31,7 @@ const SignInForm: React.FC<Props> = (props) => {
                 </div>
 
                 <div className="ol-signin-continue">
-                    <input onClick={(e) => props.onSignIn(inputs.username, inputs.password)} className="ol-signin-submit ol-signin-input" type="submit" value={props.inputText ? props.inputText : "Sign In"}></input>
+                    <input onClick={(e) => props.onSignIn(inputs.username, inputs.password)} className="ol-signin-submit ol-signin-input ol-input-button" type="submit" value={props.inputText ? props.inputText : "Sign In"}></input>
                 </div>
             </div>
         </>

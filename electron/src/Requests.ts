@@ -10,7 +10,7 @@ class Requests {
 		this.win = win;
 
 		win.on(Window.events.REQUESTS_GET, (_event: any, ...args: any) => {
-			this.get(args);
+			this.get(...args);
 		});
 		win.on(Window.events.REQUESTS_POST, (_event: any, ...args: any) => {
 			this.post(...args);
@@ -19,6 +19,12 @@ class Requests {
 
 	post(...args: any): void {
 		args = args[0]; //All data should be in 1 object so I can just get the 0th element
+
+		if (!args.data || !args.url) {
+			this.win.emit(Window.events.REQUEST_COMPLETE, { "hasError": true, "error": "Missing property on data for POST request (either \"url\" or \"data\")" });
+			return;
+		}
+
 		const data = new FormData();
 
 		Object.keys(args.data).forEach(k => {
@@ -44,7 +50,7 @@ class Requests {
 			});
 	}
 
-	get(args: any): void {
+	get(...args: any): void {
 	}
 
 	//Converts most of the response into an object `emit` can serialise

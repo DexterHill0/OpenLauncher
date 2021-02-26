@@ -103,3 +103,12 @@ export function changeBackdrop(enabled: boolean) {
 		$(".ol-backdrop").remove();
 	}
 }
+
+export function disableButtons(disabled: boolean) {
+	if (disabled) {
+		$(".ol-input-button").prop("disabled", true);
+	}
+	else {
+		$(".ol-input-button").prop("disabled", false);
+	}
+}

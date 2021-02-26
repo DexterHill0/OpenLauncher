@@ -16,7 +16,7 @@ class Requests {
 
                 if (data.hasError) {
                     reject(data.error);
-                    log.log("Error while sending POST request!");
+                    log.error(`Error while sending POST request: ${data.error}`);
                     return;
                 }
 

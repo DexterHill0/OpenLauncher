@@ -8,7 +8,7 @@ import Epic from "../../scripts/launchers/EpicGames";
 // import Discord from "../../scripts/DiscordRPC";
 
 import './SetupPage.css';
-import Steam from '../../scripts/launchers/Steam';
+import Steam from '../../scripts/steam/Steam';
 
 import SteamSlide from '../../components/setup/SteamSlide';
 
