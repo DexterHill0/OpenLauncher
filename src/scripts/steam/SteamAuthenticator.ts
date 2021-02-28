@@ -9,8 +9,11 @@ enum Status {
     "CAPTCHA_REQUIRED",
     "NEEDS_EMAIL_KEY",
 
+    "INCORRECT_CAPTCHA",
+    "INCORRECT_EMAIL_KEY",
+
     "POST_ERROR",
-    "SUCCESS_FALSE"
+    "SUCCESS_FALSE",
 }
 
 class SteamAuth {
@@ -117,8 +120,7 @@ class SteamAuth {
     }
 
     private constructKey(mod: string, exp: string): RSAPublicKey {
-        const key = RSA.getPublicKey(mod, exp);
-        return key;
+        return RSA.getPublicKey(mod, exp);
     }
 }
 

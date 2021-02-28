@@ -8,7 +8,7 @@ import Epic from "../../scripts/launchers/EpicGames";
 // import Discord from "../../scripts/DiscordRPC";
 
 import './SetupPage.css';
-import Steam from '../../scripts/steam/Steam';
+import Steam from '../../scripts/launchers/Steam';
 
 import SteamSlide from '../../components/setup/SteamSlide';
 
@@ -193,13 +193,13 @@ const SetupPage = () => {
 					</IonSlide>
 
 					<SteamSlide
-						slideDidChange={(dir) => animateSlider(dir)}
-						reachedEnd={() => changeSlide("next")}
+						reachedEnd={() => { changeSlide("next"); animateSlider("next") }}
 					></SteamSlide>
 
 					<IonSlide>
-						TEST
+						TEST!!
 					</IonSlide>
+
 				</IonSlides>
 			</div>
 			<IonLabel class="ol-dont-get-me-sued">All product names, logos, and brands are property of their respective owners in the United Kingdom and/or other countries. All company, product and service names used are for identification purposes only. Use of these names, logos, and brands does not imply endorsement.</IonLabel>

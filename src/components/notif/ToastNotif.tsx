@@ -10,7 +10,7 @@ interface Props {
     message: JSX.Element,
     duration: number,
     class: string,
-    icon?: JSX.Element;
+    icon?: JSX.Element,
 }
 
 class ToastNotif {
@@ -56,7 +56,7 @@ class ToastNotif {
     private waitToDismiss() {
         setTimeout(() => {
             $(`.${this.props.class}`).remove();
-        }, this.props.duration)
+        }, this.props.duration);
     }
 
     private display() {
