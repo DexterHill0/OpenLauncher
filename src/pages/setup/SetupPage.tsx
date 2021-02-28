@@ -7,10 +7,9 @@ import $ from "jquery";
 import Epic from "../../scripts/launchers/EpicGames";
 // import Discord from "../../scripts/DiscordRPC";
 
-import './SetupPage.css';
-import Steam from '../../scripts/launchers/Steam';
-
 import SteamSlide from '../../components/setup/SteamSlide';
+
+import './SetupPage.css';
 
 const fs = window.require("fs");
 

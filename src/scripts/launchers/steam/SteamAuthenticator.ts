@@ -1,7 +1,7 @@
-import { RSA, RSAPublicKey } from "../Crypto";
+import { RSA, RSAPublicKey } from "../../Crypto";
 
-import Requests from "../Requests";
-import { Endpoints } from "../constants/Endpoints";
+import Requests from "../../Requests";
+import { Endpoints } from "../../constants/Endpoints";
 
 enum Status {
     "COMPLETE",

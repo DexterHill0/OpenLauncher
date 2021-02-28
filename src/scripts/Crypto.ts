@@ -3,8 +3,6 @@
  */
 
 import { BigInteger } from "jsbn";
-//import { Base64 } from 'js-base64';
-
 
 class RSAPublicKey {
     modulus: BigInteger;

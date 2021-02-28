@@ -1,13 +1,7 @@
-import React from "react";
-import { IonIcon } from "@ionic/react";
-import { warningOutline } from "ionicons/icons";
-
-import ToastNotif from "../../components/notif/ToastNotif";
-
 import _set from "lodash.set";
 
-import { STEAM_PATHS } from "../constants/Paths";
-import { animateInvalidInput, getOS, readConfig, writeConfig, setupLogger } from "../../utils/Utils";
+import { STEAM_PATHS } from "../../constants/Paths";
+import { getOS, readConfig, writeConfig, setupLogger } from "../../../utils/Utils";
 
 const fs = window.require("fs");
 const log = setupLogger();

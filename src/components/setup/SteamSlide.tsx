@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-<<<<<<< Updated upstream
-import { IonLabel, IonIcon, IonItem, IonSlides, IonSlide } from '@ionic/react';
-import { chevronBack } from 'ionicons/icons';
-=======
 import { IonIcon, IonSlides, IonSlide, } from '@ionic/react';
-import { chevronBack, warningOutline } from 'ionicons/icons';
->>>>>>> Stashed changes
+import { warningOutline } from 'ionicons/icons';
 import SignInSlide from './components/SignInSlide';
 import ErrorSlide from './components/ErrorSlide';
 
-import "./SlideStyles.css"
-import Steam from '../../scripts/launchers/Steam';
+import ToastNotif from '../../components/notif/ToastNotif';
+import Steam from '../../scripts/launchers/steam/Steam';
+import { SteamAuth, Status } from '../../scripts/launchers/steam/SteamAuthenticator';
+
 import { IniKey } from '../../scripts/constants/IniKeys';
-import { getKeyByPath } from '../../scripts/constants/Paths';
-import { animateInvalidInput, writeConfig } from '../../utils/Utils';
+import { animateInvalidInput, disableButtons, writeConfig } from '../../utils/Utils';
+
+import "./SlideStyles.css"
 
 interface Props {
     slideDidChange?: (dir: "next" | "prev") => void,
@@ -32,11 +30,16 @@ const iniKeyMap: { [key: string]: SlideIndex } = {
     [IniKey.data]: SlideIndex.INSTALL_DIR,
 }
 
+const auth = new SteamAuth();
+
+
 const SteamSlide: React.FC<Props> = (props) => {
     const logo = <img src={"/assets/logos/logo_steam.png"} alt="Logo"
         style={{ "width": "250px", "height": "75px" }}></img>; //IonSlides forces images to be 100% for some reason
 
     const slideRef = useRef<HTMLIonSlidesElement>(null);
+
+    const [captchaGid, setGid] = useState(-1);
 
     const [allowedSlides] = useState([SlideIndex.SIGN_IN,]);
 
@@ -100,8 +103,6 @@ const SteamSlide: React.FC<Props> = (props) => {
         writeConfig(`${path}/common`, "paths.steam.games");
     }
 
-<<<<<<< Updated upstream
-=======
     const signIn = async (username: string, password: string, emailKey?: string, captchaText?: string) => {
         disableButtons(true);
 
@@ -138,10 +139,8 @@ const SteamSlide: React.FC<Props> = (props) => {
         disableButtons(false);
     }
 
->>>>>>> Stashed changes
     const didSkipSignIn = () => {
-        Steam.didSkip();
-
+        writeConfig(true, "accounts.ignored.steam");
         changeSlide("next");
     }
 
@@ -150,14 +149,22 @@ const SteamSlide: React.FC<Props> = (props) => {
             <IonSlides class="ol-setup-slides" ref={slideRef}>
                 <IonSlide>
                     <SignInSlide
-                        onSignIn={(us, pw) => { }}
+                        onSignIn={(us, pw) => signIn(us, pw)}
                         onSkip={didSkipSignIn}
                         logo={logo}
                     ></SignInSlide>
                 </IonSlide>
                 <IonSlide>
                     <ErrorSlide
-                        onContinue={() => { }}
+                        onContinue={(text) => signIn("", "", "", text)}
+                        error={<div style={{ "cursor": "pointer" }}>Sorry! Steam wants to verify that you are human. Please type the letters below:<br /><img style={{ "paddingTop": "0.7rem" }} src={`https://store.steampowered.com/login/rendercaptcha?gid=${captchaGid}`}></img></div>}
+                        logo={logo}
+                        extraDetail={<div onClick={async () => setGid(await auth.refreshCaptcha())}>Refresh Captcha</div>}
+                    ></ErrorSlide>
+                </IonSlide>
+                <IonSlide>
+                    <ErrorSlide
+                        onContinue={(key) => signIn("", "", key)}
                         error={<div>Please enter the code that was sent to your email: (<code>--email here--</code>)</div>}
                         logo={logo}
                     ></ErrorSlide>
