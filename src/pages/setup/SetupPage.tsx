@@ -16,19 +16,20 @@ const fs = window.require("fs");
 const log = setupLogger();
 
 
-//I can use these to have a text representation of the slides the user "has access to"
-//These have to be in the same order as the slides in the DOM
-enum SlideIndex {
-	"LAUNCHER_CHOOSE",
-	"STEAM",
-	"EPIC",
+//Used so I can make the setter have different arguments
+const usePages = () => {
+	const [pages, setPages] = useState<JSX.Element[]>([]);
+
+	const setter = (page: JSX.Element, action: "add" | "remove", index: number): void => {
+		let newPages = pages;
+		if (action === "add") newPages.splice(index, 0, page);
+		else if (action === "remove") newPages.splice(index, 1);
+		setPages(newPages);
+	}
+
+	return { pages, setPages: setter };
 }
 
-//Maps the launcher name to the slide index
-const LauncherMap: { [key: string]: SlideIndex } = {
-	"steam": SlideIndex.STEAM,
-	"epic": SlideIndex.EPIC,
-}
 
 
 const SetupPage = () => {
@@ -39,10 +40,10 @@ const SetupPage = () => {
 	const [stepAmount, setStepAmount] = useState(0);
 	const [percent, stepPercent] = useState(0);
 
-	const allowedSlides = [SlideIndex.LAUNCHER_CHOOSE,]
-
+	const { pages, setPages } = usePages();
 
 	useEffect(() => {
+
 		firstLoadSetup();
 	}, []);
 
@@ -57,7 +58,7 @@ const SetupPage = () => {
 
 	useEffect(() => {
 		animateSlider("next");
-	}, [stepAmount]); //The only time this changes is when the arrow is clicked so it is safe to assume the user is not the next slide
+	}, [stepAmount]); //The only time this changes is when the arrow is clicked so it is safe to assume the user is on the next slide
 
 	const firstLoadSetup = (): void => { //Does setup that only needs to be performed once
 		if (getOS() === "unsup-os") {
@@ -90,7 +91,7 @@ const SetupPage = () => {
 
 		Object.keys(selected).forEach(k => {
 			if (selected[k]) {
-				allowedSlides.push(LauncherMap[k]);
+
 			}
 		});
 
@@ -110,14 +111,10 @@ const SetupPage = () => {
 			const index = sw.activeIndex;
 
 			if (dir === "next") {
-				if (index + 1 > sw.slides.length) return;
 
-				sw.slideTo(allowedSlides[index + 1]); //Slide to the next allowed slide
 			}
 			else {
-				if (index - 1 < 0) return;
 
-				sw.slideTo(allowedSlides[index - 1]); //Slide to the previous allowed slide
 			}
 
 		});
@@ -192,12 +189,8 @@ const SetupPage = () => {
 					</IonSlide>
 
 					<SteamSlide
-						reachedEnd={() => { changeSlide("next"); animateSlider("next") }}
+						slideShouldChange={(dir) => changeSlide(dir)}
 					></SteamSlide>
-
-					<IonSlide>
-						TEST!!
-					</IonSlide>
 
 				</IonSlides>
 			</div>

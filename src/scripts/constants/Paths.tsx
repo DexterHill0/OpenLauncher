@@ -1,7 +1,12 @@
 import React from 'react';
-
-import { IniKey } from "./IniKeys"
 import { appDataPath, userDirectory, getOS } from "../../utils/Utils";
+
+export const IniKey: { [key: string]: string } = {
+	"data": "data",
+	"games": "games",
+	"gameusersettings": "gameusersettings",
+}
+
 
 export const STEAM_PATHS = [
 	{
