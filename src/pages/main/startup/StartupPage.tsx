@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { IonContent, IonLabel, IonProgressBar } from '@ionic/react';
+import { IonContent, IonIcon, IonLabel, IonProgressBar } from '@ionic/react';
 
 import Discord from '../../../scripts/DiscordRPC';
 import { mainLogger } from '../../../utils/Utils';
 
 import "./StartupPage.css"
+import { warningOutline } from 'ionicons/icons';
+import ToastNotif from '../../../components/notif/ToastNotif';
 
 const log = mainLogger();
 
@@ -25,7 +27,11 @@ const StartupPage: React.FC = () => {
 			//Discord.setActivity({});
 		}, () => {
 			log.error("RPC failed to initialise!");
-			//createDialog("Could not initialise Rich Presence!", 1000, "err");
+			new ToastNotif({
+				message: <div>Could not initialise rich presence!</div>,
+				icon: <IonIcon icon={warningOutline} style={{ color: "orange", width: "30px", height: "30px" }}></IonIcon>,
+				duration: 1000, class: "rpc-toast"
+			});
 		});
 
 		window.location.href = "/setup/";

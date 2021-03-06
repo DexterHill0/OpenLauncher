@@ -46,8 +46,6 @@ const SteamSlide: React.FC<Props> = (props) => {
 
     const [captchaGid, setGid] = useState(-1);
 
-
-
     useEffect(() => {
         startSetup();
 
@@ -56,8 +54,10 @@ const SteamSlide: React.FC<Props> = (props) => {
 
 
     const startSetup = (): void => {
-        //`doSetup` returns the keys of paths that dont exist so I just map those to pages using the key map
-        Steam.doSetup().forEach(k => {
+        Steam.doSetup();
+
+        //`getInvalidPaths` returns the keys of paths that dont exist so I just map those to pages using the key map
+        Steam.getInvalidPaths().forEach(k => {
             addOrRemoveSlide(k, "add");
         });
     }
@@ -118,7 +118,7 @@ const SteamSlide: React.FC<Props> = (props) => {
     }
 
     const didSkipSignIn = (): void => {
-        writeConfig(true, "accounts.ignored.steam");
+        writeConfig(true, "steam.account.shouldIgnore");
         changeSlide("next");
     }
 

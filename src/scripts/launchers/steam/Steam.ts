@@ -1,6 +1,6 @@
 import _set from "lodash.set";
 
-import { STEAM_PATHS } from "../../constants/Paths";
+import { IniKey, STEAM_PATHS } from "../../constants/Paths";
 import { getOS, readConfig, writeConfig, setupLogger } from "../../../utils/Utils";
 
 const fs = window.require("fs");
@@ -8,39 +8,33 @@ const log = setupLogger();
 
 class Steam {
 
-    static doSetup(): string[] {
-        let config = readConfig();
+    static doSetup() {
+        let config: any = {};
 
-        const checked = Steam.checkPaths();
+        const checked = Steam.getInvalidPaths();
 
         STEAM_PATHS.forEach(p => {
             if (!checked.includes(p.iniKey)) { //If the path did exist
+                log.info(`Path exists: "${p[getOS()]}"`);
+
                 config[p.iniKey] = p[getOS()];
+            }
+            else {
+                log.warn(`Path does not exist: "${p[getOS()]}"`);
             }
         });
 
-
         writeConfig(config, "paths.steam");
-
-        return checked;
     }
 
     //Moved out of setup so I can check the paths on startup.
     //Returns an array of the keys of paths that didn't exist
-    static checkPaths(): string[] {
+    static getInvalidPaths(): string[] {
         const checked: string[] = [];
 
         STEAM_PATHS.forEach(p => {
-            if (fs.existsSync(p[getOS()])) {
-                log.info(`Path exists: "${p[getOS()]}"`);
-            }
-            else {
-                log.warn(`Path does not exist: "${p[getOS()]}"`);
-
-                if (p.checkPathReg) { //Only add the path to the object if it needs to be displayed on an error page
-
-                    checked.push(p.iniKey);
-                }
+            if (!fs.existsSync(p[getOS()])) {
+                checked.push(p.iniKey);
             }
         });
 
