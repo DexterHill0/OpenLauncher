@@ -21,7 +21,7 @@
 .ol-modal-notif-grid-item {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--ion-text-color-contrast);
     --background: transparent;
 }

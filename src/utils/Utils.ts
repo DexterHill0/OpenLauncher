@@ -14,6 +14,7 @@ export function getOS() { //Returns what os the system is
 
 export const Events = { //The events that can be used to communicate with the electron render process
 	DOCK_BOUNCE: "OL-DOCK-BOUNCE",
+	NOTIFICATION: "OL-NOTIFICATION",
 
 	RPC_SET_ACTIVITY: "OL-SET-RPC-ACTIVITY",
 	RPC_HAS_INIT: "OL-RPC-HAS-INIT",
@@ -21,6 +22,8 @@ export const Events = { //The events that can be used to communicate with the el
 	REQUESTS_POST: "OL-REQUESTS-POST",
 	REQUESTS_GET: "OL-REQUESTS-GET",
 	REQUEST_COMPLETE: "OL-REQUEST-COMPLETE",
+
+
 }
 
 export const SupportedLaunchersFull = ["Epic Games Launcher", "Steam"]; //The launchers we currently support (their full names)

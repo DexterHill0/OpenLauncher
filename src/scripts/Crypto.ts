@@ -1,5 +1,5 @@
 /**
- * Copied from RSA.js on Steam's login page
+ * Adapated from RSA.js on Steam's login page
  */
 
 import { BigInteger } from "jsbn";
@@ -50,9 +50,6 @@ class RSA {
 };
 
 
-/**
- * I don't know if this is here because it has some feature that a normal hex converter doesn't so I am just gonna keep it
- */
 class Hex {
     static hex: string = "0123456789abcdef";
 
@@ -80,9 +77,6 @@ class Hex {
     }
 }
 
-/**
- * I think this uses a slightly different chatacter set than normal base64 encoding
- */
 class Base64 {
     private static base64: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 

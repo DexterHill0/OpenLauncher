@@ -1,6 +1,7 @@
 import { app } from "electron";
 import Discord from "./Discord";
 import Requests from "./Requests";
+import Notifications from "./Notification";
 import { Window } from "./Window";
 
 let mainWindow = null;
@@ -79,6 +80,11 @@ function setupRequests() {
 	r.bindEvents(mainWindow);
 }
 
+function setupNotifs() {
+	Notifications.bindEvents(mainWindow);
+}
+
+
 function checkForUpdates() {
 	return new Promise(resolve => {
 		setTimeout(() => {
@@ -103,6 +109,7 @@ app.on('activate', function () {
 app.on('ready', () => {
 	createWindow();
 
-	setupDiscord();
 	setupRequests();
+	setupNotifs();
+	setupDiscord();
 });
