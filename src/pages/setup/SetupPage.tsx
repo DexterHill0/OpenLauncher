@@ -10,6 +10,7 @@ import Epic from "../../scripts/launchers/EpicGames";
 import SteamSlide from '../../components/setup/SteamSlide';
 
 import './SetupPage.css';
+import SwipeableViews from 'react-swipeable-views';
 
 const fs = window.require("fs");
 
@@ -157,8 +158,12 @@ const SetupPage = () => {
 				</IonItem>
 
 
-				<IonSlides class="ol-setup-slides" ref={slideRef}>
-					<IonSlide class="ol-setup-single-slide">
+				<SwipeableViews
+					containerStyle={{ "width": "40rem", "height": "23rem", "textAlign": "center" }}
+					index={1}
+					enableMouseEvents
+				>
+					<div>
 						<div className="ol-setup-thanks">
 							Thanks for using OpenLauncher!
 						</div>
@@ -186,13 +191,13 @@ const SetupPage = () => {
 						<IonItem class="ol-setup-continue" lines="none" onClick={startSetup}>
 							<IonIcon icon={chevronForward} class="ol-setup-continue-icon"></IonIcon>
 						</IonItem>
-					</IonSlide>
+					</div>
 
 					<SteamSlide
 						slideShouldChange={(dir) => changeSlide(dir)}
 					></SteamSlide>
 
-				</IonSlides>
+				</SwipeableViews>
 			</div>
 			<IonLabel class="ol-dont-get-me-sued">All product names, logos, and brands are property of their respective owners in the United Kingdom and/or other countries. All company, product and service names used are for identification purposes only. Use of these names, logos, and brands does not imply endorsement.</IonLabel>
 		</IonContent >

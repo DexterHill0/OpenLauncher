@@ -31,7 +31,7 @@ export const Events = {
 }
 
 /**
- * The full names of the launcher supported
+ * The full names of the launchers supported
  */
 export const SupportedLaunchersFull = ["Epic Games Launcher", "Steam"];
 /**
@@ -79,9 +79,7 @@ export function writeConfig(data: any, key?: string): void {
 	let config = iniParse(configPath);
 
 	if (key) {
-		console.log(config)
 		_set(config, key, data);
-		console.log(config)
 	}
 	else {
 		config = data;

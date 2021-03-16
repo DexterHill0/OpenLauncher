@@ -14,6 +14,7 @@ import { IniKey } from '../../scripts/constants/Paths';
 import { animateInvalidInput, disableButtons, writeConfig } from '../../utils/Utils';
 
 import "./SlideStyles.css"
+import SwipeableViews from 'react-swipeable-views';
 
 
 interface Props {
@@ -108,12 +109,12 @@ const SteamSlide: React.FC<Props> = (props) => {
         };
 
         //I just cheat here because the paths are the same so I can just write both at the same time
-        writeConfig(path, "paths.steam.data");
-        writeConfig(`${path}/common`, "paths.steam.games");
+        writeConfig(path, "steam.paths.data");
+        writeConfig(`${path}/common`, "steam.paths.games");
     }
 
-    //If add is false the slide is removed
     const addOrRemoveSlide = (key: any, action: "add" | "rem"): void => {
+        if (!slideMappings[key]) return;
         setVisible({ ...visibleSlides, [slideMappings[key]]: action === "add" ? true : false });
     }
 
@@ -123,52 +124,43 @@ const SteamSlide: React.FC<Props> = (props) => {
     }
 
     return (
-        <IonSlide>
-            <IonSlides class="ol-setup-slides">
-                <SignInSlide
-                    key={0}
-                    onSignIn={(us, pw) => signIn(us, pw)}
-                    onSkip={didSkipSignIn}
-                    logo={logo}
-                ></SignInSlide>
-                {
-                    <>
-                        {
-                            visibleSlides.CAPTCHA ?
-                                <ErrorSlide
-                                    key={1}
-                                    onContinue={(text) => signIn("", "", "", text)}
-                                    error={<div style={{ "cursor": "pointer" }}>Sorry! Steam wants to verify that you are human. Please type the letters below:<br /><img style={{ "paddingTop": "0.7rem" }} src={`https://store.steampowered.com/login/rendercaptcha?gid=${captchaGid}`}></img></div>}
-                                    logo={logo}
-                                    extraDetail={<div onClick={async () => setGid(await auth.refreshCaptcha())}>Refresh Captcha</div>}
-                                ></ErrorSlide>
-                                : <></>
-                        }
-                    </>
+        <>
+            <SignInSlide
+                onSignIn={(us, pw) => signIn(us, pw)}
+                onSkip={didSkipSignIn}
+                logo={logo}
+            ></SignInSlide>
+            {
 
-                }
-                {
-                    visibleSlides.EMAIL_KEY ?
-                        <ErrorSlide
-                            key={2}
-                            onContinue={(key) => signIn("", "", key)}
-                            error={<div>Please enter the code that was sent to your email: (<code>--email here--</code>)</div>}
-                            logo={logo}
-                        ></ErrorSlide>
-                        : <></>
-                }
-                {
-                    visibleSlides.INSTALL_DIR ?
-                        <ErrorSlide
-                            key={3}
-                            onContinue={(p) => checkPath(p)}
-                            error={<div>Could not locate the install directory for Steam games. Please enter it below:</div>}
-                            logo={logo}
-                        ></ErrorSlide>
-                        : <></>
-                }
-            </IonSlides>
-        </IonSlide>
+                visibleSlides.CAPTCHA ?
+                    <ErrorSlide
+                        onContinue={(text) => signIn("", "", "", text)}
+                        error={<div style={{ "cursor": "pointer" }}>Sorry! Steam wants to verify that you are human. Please type the letters below:<br /><img style={{ "paddingTop": "0.7rem" }} src={`https://store.steampowered.com/login/rendercaptcha?gid=${captchaGid}`}></img></div>}
+                        logo={logo}
+                        extraDetail={<div onClick={async () => setGid(await auth.refreshCaptchaGid())}>Refresh Captcha</div>}
+                    ></ErrorSlide>
+                    : <></>
+
+            }
+            {
+                visibleSlides.EMAIL_KEY ?
+                    <ErrorSlide
+                        onContinue={(key) => signIn("", "", key)}
+                        error={<div>Please enter the code that was sent to your email: (<code>--email here--</code>)</div>}
+                        logo={logo}
+                    ></ErrorSlide>
+                    : <></>
+            }
+            {
+                visibleSlides.INSTALL_DIR ?
+                    <ErrorSlide
+                        onContinue={(p) => checkPath(p)}
+                        error={<div>Could not locate the Steam installation folder. Please enter it below:</div>}
+                        logo={logo}
+                    ></ErrorSlide>
+                    : <></>
+            }
+        </>
     );
 }
 
