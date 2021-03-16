@@ -25,6 +25,7 @@
     "@types/react-dom": "^16.9.4",
     "@types/react-router": "5.1.5",
     "@types/react-router-dom": "^5.1.7",
+    "@types/react-swipeable-views": "^0.13.0",
     "electron-log": "^4.3.1",
     "fs": "0.0.1-security",
     "history": "4.10.0",
@@ -41,6 +42,7 @@
     "react-router": "5.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^4.0.2",
+    "react-swipeable-views": "^0.13.9",
     "swiper": "^6.4.10",
     "typescript": "3.8.3"
   },
@@ -48,7 +50,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -66,7 +70,13 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "2.4.4"
+    "@capacitor/cli": "2.4.4",
+    "@storybook/addon-actions": "^6.1.21",
+    "@storybook/addon-essentials": "^6.1.21",
+    "@storybook/addon-links": "^6.1.21",
+    "@storybook/node-logger": "^6.1.21",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.1.21"
   },
   "description": "A place for all your games!"
 }

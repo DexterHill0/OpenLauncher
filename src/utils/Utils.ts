@@ -3,17 +3,24 @@ import $ from "jquery";
 import _set from "lodash.set";
 import _get from "lodash.get";
 
-var fs = window.require("fs");
+const fs = window.require("fs");
 const electronlog = window.require("electron-log");
 
-export function getOS() { //Returns what os the system is
+/**
+ * Returns what os the system is
+ */
+export function getOS(): "win" | "osx" | "unsup-os" {
 	if (navigator.appVersion.indexOf("Win") !== -1) return "win";
 	if (navigator.appVersion.indexOf("Mac") !== -1) return "osx";
 	return "unsup-os"
 }
 
-export const Events = { //The events that can be used to communicate with the electron render process
+/**
+ * The events that can be used to communicate with the main electron process
+ */
+export const Events = {
 	DOCK_BOUNCE: "OL-DOCK-BOUNCE",
+	NOTIFICATION: "OL-NOTIFICATION",
 
 	RPC_SET_ACTIVITY: "OL-SET-RPC-ACTIVITY",
 	RPC_HAS_INIT: "OL-RPC-HAS-INIT",
@@ -23,14 +30,39 @@ export const Events = { //The events that can be used to communicate with the el
 	REQUEST_COMPLETE: "OL-REQUEST-COMPLETE",
 }
 
-export const SupportedLaunchersFull = ["Epic Games Launcher", "Steam"]; //The launchers we currently support (their full names)
+/**
+ * The full names of the launchers supported
+ */
+export const SupportedLaunchersFull = ["Epic Games Launcher", "Steam"];
+/**
+ * Shortened names of the supported launchers
+ */
 export const SupportedLaunchersShort = ["epic", "steam"];
 
-export const userDirectory = window.require('os').homedir(); //Gets home directory like "/Users/.../"
+/**
+ * WINDOWS: `C:/Users/...`
+ * 
+ * OSX: `/Users/...`
+ */
+export const userDirectory = window.require('os').homedir();
+
+/**
+ * WINDOWS: `C:/Users/.../AppData`
+ * 
+ * OSX: `/Users/.../Library/Application Support`
+ */
 export const appDataPath = `${getOS() === "win" ? `${userDirectory}/AppData` : `${userDirectory}/Library/Application Support`}`
+
+/**
+ * Config file location
+ */
 export const configPath = `${appDataPath}${getOS() === "win" ? "/Roaming/" : "/Library/Application Support/"}OpenLauncher/config.ini`
 
-export function iniParse(path?: string) { //Reads the ini config file
+/**
+ * Reads the ini config file
+ * @param path  
+ */
+export function iniParse(path?: string): any {
 	try {
 		return ini.parse(fs.readFileSync(path, "utf-8"));
 	} catch (e) {
@@ -38,7 +70,12 @@ export function iniParse(path?: string) { //Reads the ini config file
 	}
 }
 
-export function writeConfig(data: any, key?: string) { //Writes to the ini config file
+/**
+ * Writes to the ini config file
+ * @param data 
+ * @param key 
+ */
+export function writeConfig(data: any, key?: string): void {
 	let config = iniParse(configPath);
 
 	if (key) {
@@ -50,14 +87,24 @@ export function writeConfig(data: any, key?: string) { //Writes to the ini confi
 
 	fs.writeFileSync(configPath, ini.stringify(config));
 }
-export function readConfig(key?: string) { //Reads the ini config file
+
+/**
+ * Reads the ini config file
+ * @param key 
+ */
+export function readConfig(key?: string): any {
 	let config = iniParse(configPath);
 
 	if (key) return _get(config, key, {});
 
 	return config;
 }
-export function clearConfig(key?: string) { //Clears the specified path in the config file or clears the full file.
+
+/**
+ * Clears the specified path in the config file or clears the full file (if `key` is left blank).
+ * @param key 
+ */
+export function clearConfig(key?: string): void {
 	let config = readConfig();
 
 	if (key) {
@@ -70,7 +117,10 @@ export function clearConfig(key?: string) { //Clears the specified path in the c
 	writeConfig(config, key);
 }
 
-export function mainLogger() { //This is the main logger 
+/**
+ * Main logger
+ */
+export function mainLogger(): any {
 	const log = electronlog;
 	log.transports.file.fileName = "main.log";
 	log.transports.file.getFile().clear();
@@ -78,8 +128,10 @@ export function mainLogger() { //This is the main logger
 
 	return log;
 }
-
-export function setupLogger() { //This logger is only used during setup
+/**
+ * The logger only used during setup
+ */
+export function setupLogger(): any {
 	const log = electronlog.create('setup');
 	log.transports.file.fileName = "setup.log";
 	log.transports.file.getFile().clear();
@@ -88,14 +140,22 @@ export function setupLogger() { //This logger is only used during setup
 	return log;
 }
 
-export function animateInvalidInput(el: string) { //Shakes a specified input box (used if the input is invalid). The animation should be in the css file, this just adds the class
+/**
+ * Adds the classes to a specified element to glow it red (animation has to be in the CSS file)
+ * @param el 
+ */
+export function animateInvalidInput(el: string): void {
 	$(el).addClass("glow-input");
 	$(el).on("animationend", () => {
 		$(el).removeClass("glow-input");
 	});
 }
 
-export function changeBackdrop(enabled: boolean) {
+/**
+ * Adds an `IonBackdrop` to the body. Disables anything on the page
+ * @param enabled
+ */
+export function changeBackdrop(enabled: boolean): void { //Add
 	if (enabled) {
 		$("body").append("<ion-backdrop class=\"ol-backdrop\" style=\"opacity: 0.6;\"></ion-backdrop>");
 	}
@@ -104,11 +164,10 @@ export function changeBackdrop(enabled: boolean) {
 	}
 }
 
-export function disableButtons(disabled: boolean) {
-	if (disabled) {
-		$(".ol-input-button").prop("disabled", true);
-	}
-	else {
-		$(".ol-input-button").prop("disabled", false);
-	}
+/**
+ * Disables any buttons with the `ol-input-button` class
+ * @param disabled 
+ */
+export function disableButtons(disabled: boolean): void {
+	$(".ol-input-button").prop("disabled", disabled);
 }

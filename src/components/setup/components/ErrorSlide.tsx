@@ -1,7 +1,7 @@
 import React from 'react';
 
 import "./SlideComponentStyles.css"
-import { IonGrid, IonRow } from '@ionic/react';
+import { IonGrid, IonRow, IonSlide } from '@ionic/react';
 import { useState } from 'react';
 
 interface Props {
@@ -15,7 +15,7 @@ const ErrorSlide: React.FC<Props> = (props) => {
 	const [input, setInput] = useState("");
 
 	return (
-		<div className="ol-error-slide-container">
+		<div>
 			<IonGrid class="ol-slide-grid">
 				<IonRow class="ol-slide-grid-row ion-justify-content-evenly">
 					{props.logo || <></>}

@@ -26,7 +26,7 @@ class Requests {
 
         })
 
-        ipcRenderer.send(Events.REQUESTS_POST, { "url": url, "data": data });
+        ipcRenderer.send(Events.REQUESTS_POST, { url, data });
 
         return prom;
     }

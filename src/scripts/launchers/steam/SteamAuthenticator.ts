@@ -107,10 +107,12 @@ class SteamAuth {
         return this.data.captchaData.captchagid;
     }
 
-    async refreshCaptcha(): Promise<number> {
+    async refreshCaptchaGid(): Promise<number> {
         const CAPTCHA_DATA = { "donotcache": this.time() }
 
         return await Requests.post(Endpoints.STEAM_REFRESH_CAPTCHA, CAPTCHA_DATA).then(res => {
+            this.data.captchaData.captchagid = res.body.gid;
+
             return res.body.gid;
         });
     }

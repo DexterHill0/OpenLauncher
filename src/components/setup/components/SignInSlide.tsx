@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonGrid, IonRow } from '@ionic/react';
+import { IonGrid, IonRow, IonSlide } from '@ionic/react';
 
 import SignInForm from '../../inputs/SignIn';
 
@@ -16,7 +16,8 @@ interface Props {
 const SignInSlide: React.FC<Props> = (props) => {
 
 	return (
-		<div className="ol-signin-slide-container">
+
+		<div>
 			<IonGrid class="ol-slide-grid">
 				<IonRow class="ol-slide-grid-row">
 					{props.logo || <></>}
@@ -38,6 +39,7 @@ const SignInSlide: React.FC<Props> = (props) => {
 				</IonRow>
 			</IonGrid>
 		</div>
+
 	);
 }
 
