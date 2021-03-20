@@ -1,7 +1,0 @@
-{
-  "name": "OpenLauncher",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}

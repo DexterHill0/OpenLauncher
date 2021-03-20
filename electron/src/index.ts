@@ -15,7 +15,7 @@ async function createWindow() {
 		minWidth: 1000,
 		minHeight: 660,
 
-		url: "http://localhost:8100/",
+		url: "http://localhost:3000/",
 
 		show: false,
 		titleBarStyle: "hiddenInset",
@@ -36,7 +36,7 @@ async function createWindow() {
 
 		show: true,
 		frame: false,
-		backgroundColor: '#262626',
+		backgroundColor: '#202020',
 		movable: false,
 		minimizable: false,
 		maximizable: false,
@@ -84,15 +84,13 @@ function setupNotifs() {
 	Notifications.bindEvents(mainWindow);
 }
 
-
 function checkForUpdates() {
 	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve(null);
-		}, 100);
+		}, 2000);
 	});
 }
-
 
 app.on('window-all-closed', function () {
 	if (process.platform !== 'darwin') {

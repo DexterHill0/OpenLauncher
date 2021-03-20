@@ -3,9 +3,9 @@ import { Client } from "discord-rpc";
 
 class Discord {
 	private client: Client;
-	private isReady: boolean = false;
 
-	hasError: boolean = false;
+	private isReady: boolean = false;
+	private hasError: boolean = false;
 
 	private _client_id: string = "806581546852810783";
 
