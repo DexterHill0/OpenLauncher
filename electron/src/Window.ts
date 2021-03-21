@@ -15,6 +15,7 @@ interface Options {
 	minimizable?: boolean,
 	maximizable?: boolean,
 	resizable?: boolean,
+	center?: boolean,
 
 	minWidth?: number,
 	minHeight?: number,
@@ -58,12 +59,17 @@ export class Window {
 		this.activeEvents = [];
 	}
 
-	async init() {
+	init() {
 		this.window = new BrowserWindow(this.options);
-		await this.window.loadURL(this.options.url);
 
 		this.isInitialised = true;
 	}
+	async loadURL() {
+		this.checkInitialised();
+
+		await this.window.loadURL(this.options.url);
+	}
+
 
 	on(event: string, fn: (...args: any[]) => any) {
 		this.activeEvents.push({
@@ -83,14 +89,18 @@ export class Window {
 	once(event: string, fn: (...args: any[]) => any) {
 		ipcMain.once(event, fn);
 	}
-
 	emit(event: string, ...args: any[]) {
+		this.checkInitialised();
 		this.window.webContents.send(event, args);
 	}
 
-	destroy(triggerEvent?: string) {
-		if (!this.isInitialised) throw new Error("Splash Screen not initialised!");
+	webContentsOn(event: any, callback: (...args: any[]) => void) { //Bodge
+		this.checkInitialised();
+		this.window.webContents.on(event, callback);
+	}
 
+	destroy(triggerEvent?: string) {
+		this.checkInitialised();
 		if (triggerEvent) {
 			this.on(triggerEvent, this.destroy);
 			return;
@@ -101,11 +111,17 @@ export class Window {
 	}
 
 	show() {
+		this.checkInitialised();
 		this.window.show();
 	}
 
 	devTools() {
+		this.checkInitialised();
 		this.window.webContents.openDevTools();
+	}
+
+	private checkInitialised() {
+		if (!this.isInitialised) throw new Error("Splash Screen not initialised!");
 	}
 }
 

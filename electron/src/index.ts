@@ -1,4 +1,4 @@
-import { app } from "electron";
+import { app, Menu, dialog, shell } from "electron";
 import Discord from "./Discord";
 import Requests from "./Requests";
 import Notifications from "./Notification";
@@ -8,6 +8,8 @@ let mainWindow = null;
 let splashScreen = null;
 
 async function createWindow() {
+
+	Menu.setApplicationMenu(null);
 
 	mainWindow = new Window({
 		height: 920,
@@ -20,14 +22,17 @@ async function createWindow() {
 		show: false,
 		titleBarStyle: "hiddenInset",
 		movable: true,
+		center: true,
 
 		webPreferences: {
 			nodeIntegration: true,
-			devTools: true,
+			devTools: true, //--------false in build------------------
 			enableRemoteModule: true,
 		}
 	});
 	mainWindow.init();
+	//await mainWindow.loadURL();
+	//mainWindow.webContentsOn('will-navigate', e => e.preventDefault());
 
 	splashScreen = new Window({
 		height: 300,
@@ -47,7 +52,9 @@ async function createWindow() {
 			devTools: false,
 		}
 	});
-	await splashScreen.init();
+	splashScreen.init();
+	await splashScreen.loadURL();
+	splashScreen.webContentsOn('will-navigate', e => e.preventDefault());
 
 	mainWindow.on(Window.events.DOCK_BOUNCE, () => {
 		app.dock.bounce("critical");
@@ -62,33 +69,47 @@ async function createWindow() {
 	mainWindow.emit(Window.events.UPDATE_CHECK_FINISHED);
 
 	splashScreen.destroy();
+	splashScreen = null;
+
 	mainWindow.show();
 
+	//--------------------Remove in build----------------------
 	mainWindow.devTools();
 
 }
 
-function setupDiscord() {
-	let d = new Discord();
+function setup() {
+	const d = new Discord();
 	d.bindEvents(mainWindow);
-
 	d.startRPC();
-}
 
-function setupRequests() {
-	let r = new Requests();
+	const r = new Requests();
 	r.bindEvents(mainWindow);
-}
 
-function setupNotifs() {
 	Notifications.bindEvents(mainWindow);
 }
 
 function checkForUpdates() {
 	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve(null);
-		}, 2000);
+		dialog.showMessageBox(null, {
+			title: "Update",
+			message: "A new update is available!",
+			detail: "Download?",
+			checkboxLabel: "Close OpenLauncher?",
+			checkboxChecked: true,
+			buttons: [
+				"Download",
+				"Cancel"
+			],
+		}).then(resp => {
+			if (resp.response === 1) {
+				resolve(null);
+			}
+			else {
+				shell.openExternal("https://github.com/DexterHill0/OpenLauncher/releases");
+				resp.checkboxChecked ? app.quit() : resolve(null);
+			}
+		})
 	});
 }
 
@@ -99,15 +120,20 @@ app.on('window-all-closed', function () {
 });
 
 app.on('activate', function () {
-	if (mainWindow === null) {
+	if (mainWindow === null && splashScreen === null) {
 		createWindow();
+	}
+	else {
+		if (splashScreen) {
+			splashScreen.show();
+		}
+		else {
+			mainWindow.show();
+		}
 	}
 });
 
 app.on('ready', () => {
 	createWindow();
-
-	setupRequests();
-	setupNotifs();
-	setupDiscord();
+	setup();
 });
