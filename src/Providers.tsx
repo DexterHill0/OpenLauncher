@@ -1,14 +1,15 @@
 import React from 'react';
 
 import { Provider } from "jotai";
+import { OfflineProvider } from './providers/OfflineProvider';
 
 
-interface Props { }
-
-export const Providers: React.FC<Props> = ({ children }) => {
+export const Providers: React.FC = ({ children }) => {
     return (
         <Provider>
-            {children}
+            <OfflineProvider>
+                {children}
+            </OfflineProvider>
         </Provider>
     );
 };
