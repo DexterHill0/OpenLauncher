@@ -1,6 +1,7 @@
-import { Events, mainLogger } from "../utils/Utils";
+import { Events } from "../utils/Utils";
+import Logger from "../utils/Logger";
 
-const log = mainLogger();
+const log = Logger.getMainLogger();
 
 const ipcRenderer = window.require("electron").ipcRenderer;
 

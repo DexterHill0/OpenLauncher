@@ -1,11 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import * as serviceWorker from "./serviceWorker";
 
 import Providers from "./Providers";
-import ReactModal from 'react-modal';
+import Logger from "./utils/Logger";
 
-import App from './App';
+import ReactModal from "react-modal";
+
+
+import App from "./App";
+
+Logger.initialise();
 
 ReactModal.setAppElement("#root");
 
@@ -15,7 +20,7 @@ ReactDOM.render(
 			<App />
 		</Providers>
 	</React.StrictMode>,
-	document.getElementById('root')
+	document.getElementById("root")
 );
 
 serviceWorker.unregister();

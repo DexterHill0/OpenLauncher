@@ -14,7 +14,6 @@ class DiscordRPC {
 	 * Checks if RPC was initialised by getting the status from an event
 	 */
 	static checkStatus(): Promise<void> {
-
 		const prom = new Promise<any>((resolve, reject) => {
 			ipcRenderer.on(Events.RPC_HAS_INIT, (_event: any, init: any) => {
 				init ? resolve(null) : reject(null);

@@ -1,10 +1,10 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Redirect, Route } from 'react-router';
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Redirect, Route } from "react-router";
 
-import './theme/variables.css';
+import "./theme/variables.css";
 
-import SetupPage from './pages/setup/SetupPage';
+import SetupPage from "./pages/setup/SetupPage";
 import StartupPage from "./pages/main/StartupPage";
 
 const App: React.FC = () => (

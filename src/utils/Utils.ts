@@ -4,7 +4,6 @@ import _set from "lodash.set";
 import _get from "lodash.get";
 
 const fs = window.require("fs");
-const electronlog = window.require("electron-log");
 
 /**
  * Returns what os the system is
@@ -115,29 +114,6 @@ export function clearConfig(key?: string): void {
 	}
 
 	writeConfig(config, key);
-}
-
-/**
- * Main logger
- */
-export function mainLogger(): any {
-	const log = electronlog;
-	log.transports.file.fileName = "main.log";
-	log.transports.file.getFile().clear();
-	log.transports.file.format = "[{h}:{i}:{s}] [{level} from {processType}] {text}";
-
-	return log;
-}
-/**
- * The logger only used during setup
- */
-export function setupLogger(): any {
-	const log = electronlog.create('setup');
-	log.transports.file.fileName = "setup.log";
-	log.transports.file.getFile().clear();
-	log.transports.file.format = "[{h}:{i}:{s}] [{level}] {text}";
-
-	return log;
 }
 
 /**

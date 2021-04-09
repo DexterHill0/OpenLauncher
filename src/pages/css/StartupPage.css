@@ -1,0 +1,36 @@
+.ol-startup-page {
+	--background: var(--ol-colour-primary-dark);
+	overflow: hidden;
+	user-select: none;
+}
+
+.ol-startup-content {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.ol-startup-spinner {
+	transform: scale(1.8);
+}
+
+.ol-startup-welcome-text {
+	color: var(--ol-text-colour);
+	font-weight: 400;
+	font-style: italic;
+	font-size: 1.7rem;
+	padding-top: 2rem;
+}
+
+
+.ol-logo-info {
+	color: var(--ol-text-colour);
+	font-weight: 200;
+	font-size: 0.8rem;
+	position: fixed;
+	bottom: 0.3rem;
+	left: 0.8rem;
+	opacity: 0.5;
+}

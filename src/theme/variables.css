@@ -5,6 +5,10 @@
 	--ol-colour-primary-dark: #1a1a1a;
 	--ol-colour-secondary-dark: #202020;
 	--ol-colour-tertiary-dark: #252525;
+	--ol-colour-not-selected: #777777;
+	--ol-colour-bad: #ff4e50;
+	--ol-colour-ok: #f9d423;
+	--ol-colour-good: #50ff4e;
 	--ol-colour-red: #ff4e50;
 	--ol-colour-yellow: #f9d423;
 	--ol-colour-light-red: #ff8183;

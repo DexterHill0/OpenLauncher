@@ -1,10 +1,11 @@
 import _set from "lodash.set";
 
 import { IniKey, STEAM_PATHS } from "../../constants/Paths";
-import { getOS, readConfig, writeConfig, setupLogger } from "../../../utils/Utils";
+import { getOS, readConfig, writeConfig } from "../../../utils/Utils";
+import Logger from "../../../utils/Logger";
 
 const fs = window.require("fs");
-const log = setupLogger();
+const log = Logger.getSetupLogger();
 
 class Steam {
 

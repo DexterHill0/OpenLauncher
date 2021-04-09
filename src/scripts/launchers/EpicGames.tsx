@@ -2,11 +2,12 @@ import React from "react";
 
 import _set from "lodash.set";
 
-import { animateInvalidInput, getOS, readConfig, writeConfig, iniParse, setupLogger } from "../../utils/Utils";
+import { animateInvalidInput, getOS, readConfig, writeConfig, iniParse } from "../../utils/Utils";
 import { EPIC_PATHS } from "../constants/Paths";
+import Logger from "../../utils/Logger";
 
 const fs = window.require("fs");
-const log = setupLogger();
+const log = Logger.getSetupLogger();
 
 class Epic {
 	static logo = <img src={"/assets/logos/logo_epic.png"} alt="Logo" width={105} height={105}></img>;

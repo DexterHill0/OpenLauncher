@@ -9,7 +9,7 @@ let splashScreen = null;
 
 async function createWindow() {
 
-	Menu.setApplicationMenu(null);
+	//Menu.setApplicationMenu(null);
 
 	mainWindow = new Window({
 		height: 920,
@@ -31,7 +31,7 @@ async function createWindow() {
 		}
 	});
 	mainWindow.init();
-	//await mainWindow.loadURL();
+	await mainWindow.loadURL();
 	//mainWindow.webContentsOn('will-navigate', e => e.preventDefault());
 
 	splashScreen = new Window({
@@ -94,7 +94,6 @@ function checkForUpdates() {
 		dialog.showMessageBox(null, {
 			title: "Update",
 			message: "A new update is available!",
-			detail: "Download?",
 			checkboxLabel: "Close OpenLauncher?",
 			checkboxChecked: true,
 			buttons: [

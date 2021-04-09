@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import DiscordRPC from '../../scripts/DiscordRPC';
-import { mainLogger } from '../../utils/Utils';
+import DiscordRPC from "../../scripts/DiscordRPC";
+import Logger from "../../utils/Logger";
 
-import "./StartupPage.css"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
-const log = mainLogger();
+import "../css/StartupPage.css"
+
+const log = Logger.getMainLogger();
 
 const StartupPage: React.FC = () => {
 
+	const [isFirstTime, setFirstTime] = useState(1);
+
 	useEffect(() => {
 		configure();
-		checkSetup();
 	}, []);
 
 	const configure = () => {
@@ -30,8 +33,15 @@ const StartupPage: React.FC = () => {
 	}
 
 	return (
-		<div className="ol-starup-main-content">
+		<div className="ol-startup-page">
+
+			<div className="ol-startup-content">
+				<LoadingSpinner class="ol-startup-spinner" />
+				<div className="ol-startup-welcome-text">{isFirstTime ? "Welcome!" : "Welcome Back!"}</div>
+			</div>
+
 			<div className="ol-logo-info">All product names, logos, and brands are property of their respective owners in the United Kingdom and/or other countries. All company, product and service names used are for identification purposes only. Use of these names, logos, and brands does not imply endorsement.</div>
+
 		</div>
 	);
 };
