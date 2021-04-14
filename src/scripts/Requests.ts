@@ -1,8 +1,6 @@
 import { Events } from "../utils/Utils";
-import Logger from "../utils/Logger";
 
-const log = Logger.getMainLogger();
-
+const log = window.require("electron-log");
 const ipcRenderer = window.require("electron").ipcRenderer;
 
 class Requests {

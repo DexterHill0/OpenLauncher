@@ -1,12 +1,20 @@
-import React from 'react';
+import React from "react";
 
+import Button from "../../components/primitives/Button";
+import Text from "../../components/primitives/Text";
+import ProgressBar from "../../components/primitives/ProgressBar";
 
-import './SetupPage.css';
+import "../css/SetupPage.css";
 
 const SetupPage = () => {
 
 	return (
-		<></>
+		<div className="ol-setup-page">
+			<Button width="7rem" height="5rem" gradientType="light" animateOnHover>
+				<Text fontSize="1rem" fontWeight={200}>I am button</Text>
+			</Button>
+			<ProgressBar width="100%" min={0} max={100} value={34} rocket></ProgressBar>
+		</div>
 	);
 }
 

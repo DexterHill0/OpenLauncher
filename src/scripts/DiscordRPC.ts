@@ -1,4 +1,6 @@
-import { Events, writeConfig } from "../utils/Utils";
+//import Settings from "../scripts/Settings";
+
+import { Events } from "../utils/Utils";
 
 /**
  * The electron render process is considered a browser. A browser requires a websocket connetion to Discord however
@@ -14,13 +16,15 @@ class DiscordRPC {
 	 * Checks if RPC was initialised by getting the status from an event
 	 */
 	static checkStatus(): Promise<void> {
+
 		const prom = new Promise<any>((resolve, reject) => {
 			ipcRenderer.on(Events.RPC_HAS_INIT, (_event: any, init: any) => {
 				init ? resolve(null) : reject(null);
 
-				writeConfig(init.toString(), "settings.discord.rpcInit");
+				//Settings.set("settings.discord.rpcInit", init.toString());
 			});
 		});
+
 
 		ipcRenderer.send(Events.RPC_HAS_INIT);
 

@@ -13,7 +13,7 @@ const App: React.FC = () => (
 
 		<Route path="/startup/" component={StartupPage} />
 
-		<Route path="/" exact render={() => <Redirect to="/startup/"></Redirect>}></Route>
+		<Route path="/" exact render={() => <Redirect to="/setup/"></Redirect>}></Route> {/*Tempory setup redirect for testing*/}
 	</BrowserRouter>
 );
 

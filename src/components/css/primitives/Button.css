@@ -1,0 +1,57 @@
+
+.ol-custom-button {
+	margin: 0 auto;
+	text-align: center;
+	position: relative;
+	border-radius: 1.1rem;
+	box-sizing: border-box;
+	color: var(--ol-text-colour);
+	overflow: hidden;
+	padding: 0.2rem;
+	cursor: pointer;
+}
+
+.ol-custom-button::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 200%;
+	height: 100%;
+}
+
+.ol-custom-button.dark::before {
+	background: var(--ol-gradient-dark);
+}
+
+.ol-custom-button.light::before {
+	background: var(--ol-gradient-light);
+}
+
+.ol-custom-button span {
+	position: relative;
+	height: 100%;
+	font-size: 1rem;
+	background: var(--ol-colour-tertiary-dark);
+	border-radius: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	left: 0.5px; /* why? */
+}
+
+.ol-custom-button:active {
+	opacity: 0.8;
+}
+
+.ol-custom-button.ol-button-hover-animate:focus:before,
+.ol-custom-button.ol-button-hover-animate:hover:before {
+	animation: hover-animate 0.75 linear infinite;
+}
+
+@keyframes hover-animate {
+	to {
+		transform: translateX(-50%);
+	}
+}

@@ -1,9 +1,4 @@
-import ini from "ini";
 import $ from "jquery";
-import _set from "lodash.set";
-import _get from "lodash.get";
-
-const fs = window.require("fs");
 
 /**
  * Returns what os the system is
@@ -53,68 +48,10 @@ export const userDirectory = window.require('os').homedir();
 export const appDataPath = `${getOS() === "win" ? `${userDirectory}/AppData` : `${userDirectory}/Library/Application Support`}`
 
 /**
- * Config file location
+ * Log file location
  */
-export const configPath = `${appDataPath}${getOS() === "win" ? "/Roaming/" : "/Library/Application Support/"}OpenLauncher/config.ini`
+export const logFilePath = `${appDataPath}${getOS() === "win" ? "/Roaming/" : "/Library/Application Support/"}OpenLauncher/logs/main.log`
 
-/**
- * Reads the ini config file
- * @param path  
- */
-export function iniParse(path?: string): any {
-	try {
-		return ini.parse(fs.readFileSync(path, "utf-8"));
-	} catch (e) {
-		return {};
-	}
-}
-
-/**
- * Writes to the ini config file
- * @param data 
- * @param key 
- */
-export function writeConfig(data: any, key?: string): void {
-	let config = iniParse(configPath);
-
-	if (key) {
-		_set(config, key, data);
-	}
-	else {
-		config = data;
-	}
-
-	fs.writeFileSync(configPath, ini.stringify(config));
-}
-
-/**
- * Reads the ini config file
- * @param key 
- */
-export function readConfig(key?: string): any {
-	let config = iniParse(configPath);
-
-	if (key) return _get(config, key, {});
-
-	return config;
-}
-
-/**
- * Clears the specified path in the config file or clears the full file (if `key` is left blank).
- * @param key 
- */
-export function clearConfig(key?: string): void {
-	let config = readConfig();
-
-	if (key) {
-		_set(config, key, {});
-	}
-	else {
-		config = {};
-	}
-
-	writeConfig(config, key);
-}
 
 /**
  * Adds the classes to a specified element to glow it red (animation has to be in the CSS file)
