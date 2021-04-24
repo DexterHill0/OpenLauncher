@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import IconCheckmark from "../icons/IconCheckmark";
+import { Icon, Checkmark } from "../icons/Icons";
 
 import "../css/primitives/Checkbox.css";
 
@@ -22,7 +22,7 @@ const IconCheckbox: React.FC<Props> = (props) => {
 		>
 			<div className="ol-custom-checkbox-checkmark">
 				{
-					isChecked ? <IconCheckmark stroke="white"></IconCheckmark> : <></>
+					isChecked ? <Icon icon={Checkmark} stroke="white"></Icon> : <></>
 				}
 			</div>
 		</div>

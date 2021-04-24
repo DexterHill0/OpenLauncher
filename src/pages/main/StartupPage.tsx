@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DiscordRPC from "../../scripts/DiscordRPC";
 import openReportFilled from "../../utils/OpenNewReport";
 
-import IconLogoGithub from "../../components/icons/IconLogoGithub";
+import { Icon, LogoGithub } from "../../components/icons/Icons";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 import "../css/StartupPage.css"
@@ -48,7 +48,7 @@ const StartupPage: React.FC = () => {
 			</div>
 
 			<div className="ol-startup-bug-report" onClick={openReportFilled}>
-				<IconLogoGithub stroke="white"></IconLogoGithub>
+				<Icon icon={LogoGithub} stroke="white"></Icon>
 				<div className="ol-startup-bug-report-text">Found a bug? Report it!</div>
 			</div>
 

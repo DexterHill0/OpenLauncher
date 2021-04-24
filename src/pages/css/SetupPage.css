@@ -1,6 +1,46 @@
 .ol-setup-page {
-	background: var(--ol-colour-primary-dark);
+	overflow: hidden;
 	width: 100%;
 	height: 100%;
 	user-select: none;
+}
+
+.ol-setup-page-content-container {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 0.4fr 1.6fr;
+	grid-template-areas:
+		"progress content";
+	z-index: 2;
+}
+
+.ol-setup-page-space-gradient {
+	overflow: hidden;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, var(--ol-colour-primary-dark) 100%);
+}
+
+.ol-setup-page-stars {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	clip-path: inset(0 0 40% 0);
+	opacity: 0.2;
+}
+
+.ol-setup-page-content {
+	grid-area: "content";
+	display: flex; 
+	align-items: center;
+}
+
+.ol-setup-page-progress-bar {
+	grid-area: progress;
+	position: relative; 
+	margin: 0 70%;
+	display: flex;
+	align-items: center;
 }

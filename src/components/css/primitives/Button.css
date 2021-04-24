@@ -1,14 +1,12 @@
 
 .ol-custom-button {
-	margin: 0 auto;
 	text-align: center;
 	position: relative;
 	border-radius: 1.1rem;
 	box-sizing: border-box;
-	color: var(--ol-text-colour);
 	overflow: hidden;
+	color: var(--ol-text-colour);
 	padding: 0.2rem;
-	cursor: pointer;
 }
 
 .ol-custom-button::before {
@@ -16,16 +14,16 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 200%;
+	width: 270%;
 	height: 100%;
 }
 
 .ol-custom-button.dark::before {
-	background: var(--ol-gradient-dark);
+	background: linear-gradient(90deg, var(--ol-colour-red) 0%, var(--ol-colour-yellow) 40%, var(--ol-colour-red) 55%, var(--ol-colour-yellow) 85%, var(--ol-colour-yellow) 100%);
 }
 
 .ol-custom-button.light::before {
-	background: var(--ol-gradient-light);
+	background: linear-gradient(90deg, var(--ol-colour-light-red) 0%, var(--ol-colour-light-yellow) 40%, var(--ol-colour-light-red) 55%, var(--ol-colour-light-yellow) 85%, var(--ol-colour-light-yellow) 100%);
 }
 
 .ol-custom-button span {
@@ -38,20 +36,20 @@
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
-	left: 0.5px; /* why? */
+	padding-bottom: 1px; /* why?? */
+	margin-top: 0.5px; /* why?? */
 }
 
 .ol-custom-button:active {
 	opacity: 0.8;
 }
 
-.ol-custom-button.ol-button-hover-animate:focus:before,
-.ol-custom-button.ol-button-hover-animate:hover:before {
-	animation: hover-animate 0.75 linear infinite;
+.ol-custom-button.ol-button-hover-animate:not(.disabled):hover::before {
+	animation: hover-animate 2.15s linear infinite;
 }
 
 @keyframes hover-animate {
 	to {
-		transform: translateX(-50%);
+		transform: translateX(-55%);
 	}
 }
