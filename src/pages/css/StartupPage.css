@@ -31,7 +31,7 @@
 	grid-template-rows: 1fr;
 	gap: 0px 0px;
 	grid-template-areas:
-    "logo text";
+	"logo text";
 	align-items: center;
 	position: absolute;
 	left: 50%;

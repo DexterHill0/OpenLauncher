@@ -1,15 +1,15 @@
 .ol-progress-bar-container {
-    background: var(--ol-colour-tertiary-dark);
-    border-radius: 1rem;
+	background: var(--ol-colour-tertiary-dark);
+	border-radius: 1rem;
 }
 
 .ol-progress-bar-container, .ol-progress-bar-filled {
-    position: absolute;
-    border-radius: 1rem;
+	position: absolute;
+	border-radius: 1rem;
 }
 
 .ol-progress-bar-filled-rocket {
-    position: absolute;
-    width: 3.5rem;
-    height: 3.5rem;
+	position: absolute;
+	width: 3.5rem;
+	height: 3.5rem;
 }

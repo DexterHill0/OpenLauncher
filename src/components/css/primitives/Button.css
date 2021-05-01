@@ -6,7 +6,7 @@
 	box-sizing: border-box;
 	overflow: hidden;
 	color: var(--ol-text-colour);
-	padding: 0.2rem;
+	padding: 0.15rem;
 }
 
 .ol-custom-button::before {
@@ -36,8 +36,14 @@
 	align-items: center;
 	justify-content: center;
 	box-sizing: border-box;
-	padding-bottom: 1px; /* why?? */
+	/* button refactor needed to get rid of these tiny offsets */
+	padding-bottom: 1px; /* why? */
 	margin-top: 0.5px; /* why?? */
+	left: 0.5px;
+}
+
+.ol-custom-button.disabled span {
+	right: 0.5px; 
 }
 
 .ol-custom-button:active {

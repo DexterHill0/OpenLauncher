@@ -11,7 +11,7 @@ interface Props {
 	class?: string;
 }
 
-const IconCheckbox: React.FC<Props> = (props) => {
+const Checkbox: React.FC<Props> = (props) => {
 
 	const [isChecked, setIsChecked] = useState(false);
 
@@ -20,13 +20,11 @@ const IconCheckbox: React.FC<Props> = (props) => {
 			onClick={(e) => { setIsChecked(!isChecked); if (props.onClick) props.onClick(e); }}
 			style={{ "width": props.size, "height": props.size }}
 		>
-			<div className="ol-custom-checkbox-checkmark">
-				{
-					isChecked ? <Icon icon={Checkmark} stroke="white"></Icon> : <></>
-				}
-			</div>
+			{
+				isChecked ? <Icon icon={Checkmark} stroke="white"></Icon> : <></>
+			}
 		</div>
 	);
 }
 
-export default IconCheckbox;
+export default Checkbox;

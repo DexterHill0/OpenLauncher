@@ -40,9 +40,9 @@ ${fs.readFileSync(logFilePath)}
 `
 
 const openReportFilled = () => {
-  const encoded = encodeURIComponent(reportString);
+	const encoded = encodeURIComponent(reportString);
 
-  window.require("electron").shell.openExternal(`https://www.github.com/DexterHill0/OpenLauncher/issues/new?title=[Bug]%20<CHANGE%20ME!>&body=${encoded}&assignees=DexterHill0&labels=bug`)
+	window.require("electron").shell.openExternal(`https://www.github.com/DexterHill0/OpenLauncher/issues/new?title=[Bug]%20<CHANGE%20ME!>&body=${encoded}&assignees=DexterHill0&labels=bug`)
 }
 
 export default openReportFilled;

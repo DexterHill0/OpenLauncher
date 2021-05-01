@@ -1,15 +1,9 @@
 .ol-custom-checkbox-container {
-    background: var(--ol-colour-tertiary-dark);
-    border: 0.15rem solid var(--ol-colour-not-selected);
-    border-radius: 50%;
+	background: var(--ol-colour-tertiary-dark);
+	border: 0.15rem solid var(--ol-colour-not-selected);
+	border-radius: 50%;
 }
 
 .ol-custom-checkbox-container:active {
-    opacity: 0.8;
-}
-
-.ol-custom-checkbox-checkmark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	opacity: 0.8;
 }
