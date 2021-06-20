@@ -6,7 +6,7 @@ import Text from "../../components/primitives/Text";
 import Item from "../../components/primitives/Item";
 import ProgressBar from "../../components/primitives/ProgressBar";
 
-import HelpTooltip from "../../components/HelpTooltip";
+import InfoCircle from "../../components/InfoCircle";
 import Stars from "../../components/Stars";
 import { Fader, FaderProps } from "../../components/Fader";
 
@@ -15,6 +15,12 @@ import "../css/SetupPage.css";
 const SetupPage = () => {
 
 	const faderRef = useRef<FaderProps>(null);
+
+	const fadeNext = () => {
+		if (faderRef === null || faderRef.current === null) return;
+
+		faderRef.current.fadeNext();
+	}
 
 	return (
 		<div className="ol-setup-page">
@@ -26,35 +32,41 @@ const SetupPage = () => {
 
 			<div className="ol-setup-page-content-container">
 				<div className="ol-setup-page-content">
-					<Button width="10rem" height="2.5rem" gradientType="light" animateOnHover
-						onClick={() => {
-							if (faderRef === null || faderRef.current === null) return;
-							faderRef?.current?.fadeNext();
-						}}
-					>
-						<Text fontSize="1rem" fontWeight={400}>Continue</Text>
-					</Button>
-
 					<Fader startIndex={0} ref={faderRef} fadeTime={1000}>
-						<div>
+						<>
 							<div className="ol-setup-page-select-launchers-container">
-								<Text fontSize="2.2rem" fontWeight={200}>Select the launchers you'd like to use:</Text>
+								<Text class="ol-setup-page-select-launchers-title" fontSize="2.2rem" fontWeight={200}>Select the launchers you'd like to use:</Text>
 								<div className="ol-setup-page-select-launchers-checkboxes">
+									<Item
+										start={<Checkbox size="1.2rem"></Checkbox>}
+										middle={<Text fontSize="1.2rem" fontWeight={400}>Steam</Text>}
+										end={<img src="/assets/logos/steam_logo.svg" width={40} height={40}></img>}
+									></Item>
+									<Item
+										start={<Checkbox size="1.2rem"></Checkbox>}
+										middle={<Text fontSize="1.2rem" fontWeight={400}>Epic Games Launcher</Text>}
+										end={<img src="/assets/logos/epic_logo.svg" width={50} height={50}></img>}
+									></Item>
 								</div>
 								<div className="ol-setup-page-select-launchers-account">
 									<Item
-										start={<Checkbox size="1rem"></Checkbox>}
+										start={<Checkbox size="1.2rem" startSelected></Checkbox>}
 										middle={<Text fontSize="1rem" fontWeight={200}>Add accounts?</Text>}
 										end={
-											<HelpTooltip
-												size="1.2rem"
+											<InfoCircle
+												size="1rem"
 												tooltip="Will display pages (or try automatically) to sign you into your accounts of the launchers you selected. You can alway sign into them in Settings at a later time."
-											></HelpTooltip>
+											></InfoCircle>
 										}
 									></Item>
 								</div>
+								<Button class="ol-setup-page-select-launchers-button" width="10rem" height="2.5rem" gradientType="light" animateOnHover
+									onClick={fadeNext}
+								>
+									<Text fontSize="1rem" fontWeight={400}>Continue</Text>
+								</Button>
 							</div>
-						</div>
+						</>
 					</Fader>
 				</div>
 				<div className="ol-setup-page-progress-bar">

@@ -1,14 +1,14 @@
 import React from "react";
 
-import "./css/Stars.css"
+import styles from "./css/Stars.module.css";
 
 const Stars: React.FC = () => {
 
 	return (
 		<>
-			<div className="ol-stars-1"></div>
-			<div className="ol-stars-2"></div>
-			<div className="ol-stars-3"></div>
+			<div className={styles["stars1"]}></div>
+			<div className={styles["stars2"]}></div>
+			<div className={styles["stars3"]}></div>
 		</>
 	)
 }

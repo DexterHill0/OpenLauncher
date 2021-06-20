@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../css/primitives/Item.css";
+import styles from "../css/primitives/Item.module.css";
 
 interface Props {
 	start?: JSX.Element;
@@ -12,16 +12,16 @@ interface Props {
 const Item: React.FC<Props> = (props) => {
 
 	return (
-		<div className="ol-item-template"
-			style={{ "background": props.background || "", }}
+		<div className={styles["item"]}
+			style={{ background: props.background || "", }}
 		>
-			<div className="ol-item-template-start"
-				style={{ "paddingRight": props.middle ? "0.7rem" : "" }}
+			<div
+				style={{ paddingRight: props.middle ? "0.7rem" : "" }}
 			>{props.start}</div>
-			<div className="ol-item-template-middle"
-				style={{ "paddingRight": props.end ? "0.7rem" : "" }}
+			<div
+				style={{ paddingRight: props.end ? "0.7rem" : "" }}
 			>{props.middle}</div>
-			<div className="ol-item-template-end">{props.end}</div>
+			<div>{props.end}</div>
 		</div>
 	)
 }

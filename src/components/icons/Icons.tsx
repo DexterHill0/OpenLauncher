@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-	icon: any;
+	icon: () => JSX.Element;
 	stroke?: string;
 	strokeWidth?: string;
 	gradient?: boolean;
@@ -11,11 +11,11 @@ const Icon: React.FC<Props> = (props) => {
 
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style={{
-			"stroke": (props.stroke ? props.gradient ? `url(#${props.stroke})` : props.stroke : "white"),
-			"strokeWidth": props.strokeWidth ? props.strokeWidth : "32px",
-			"fill": props.stroke || "white",
-			"width": "100%",
-			"height": "100%",
+			stroke: (props.stroke ? props.gradient ? `url(#${props.stroke})` : props.stroke : "white"),
+			strokeWidth: props.strokeWidth ? props.strokeWidth : "32px",
+			fill: props.stroke || "white",
+			width: "100%",
+			height: "100%",
 		}}
 		>
 			<defs>

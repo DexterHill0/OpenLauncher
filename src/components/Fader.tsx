@@ -1,13 +1,11 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
 
-//import "../css/primitives/Button.css";
-
 interface Props {
 	startIndex?: number;
 	fadeTime?: number;
 	onReachedEnd?: () => void;
 	ref?: any;
-	children?: React.ReactNode | React.ReactNode[]
+	children?: React.ReactNode | React.ReactNode[];
 }
 
 export interface FaderProps {
@@ -32,7 +30,7 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 
 		setCurrentChild({
 			child: currentChild.child,
-			direction: +!currentChild.direction,
+			direction: +!currentChild.direction, // `!currentChild.direction` inverts the direction (becomes boolean), `+` converts it to a number
 		});
 		nextChild = currentChild.child + 1;
 	}
@@ -67,21 +65,24 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 				child: nextChild,
 				direction: +!currentChild.direction,
 			}));
-
 		}, props.fadeTime || 500)
 	}
 
 	useImperativeHandle(ref, () => ({ fadeNext, fadePrev, fadeTo }));
 
 	return (
-		<div>
+		<div style={{ width: "100%", height: "100%" }}>
 			{
 				React.Children.map(children, (child, i) => (
 					<div key={i}
 						style={{
-							"opacity": i === currentChild.child ? currentChild.direction : "0",
-							"transition": `opacity ${props.fadeTime || 500}ms ease-in`,
-							"position": "absolute",
+							opacity: i === currentChild.child ? currentChild.direction : "0",
+							transition: `opacity ${props.fadeTime || 500}ms ease-in`,
+							position: "absolute",
+							height: "100%",
+							width: "100%",
+							display: "flex",
+							alignItems: "center"
 						}}
 					>
 						{child}
