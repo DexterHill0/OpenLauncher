@@ -1,30 +1,7 @@
 import { BrowserWindow, ipcMain } from "electron";
 
-interface Options {
-	height: number,
-	width: number,
-	url: string,
-
-	show?: boolean,
-
-	frame?: boolean,
-	backgroundColor?: string,
-	titleBarStyle?: "hiddenInset" | "default" | "hidden" | "customButtonsOnHover",
-
-	movable?: boolean,
-	minimizable?: boolean,
-	maximizable?: boolean,
-	resizable?: boolean,
-	center?: boolean,
-
-	minWidth?: number,
-	minHeight?: number,
-
-	webPreferences?: {
-		nodeIntegration?: boolean,
-		devTools?: boolean,
-		enableRemoteModule?: boolean,
-	}
+interface Options extends Electron.BrowserWindowConstructorOptions {
+	url: string;
 }
 
 export class Window {

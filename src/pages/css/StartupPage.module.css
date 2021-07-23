@@ -1,0 +1,57 @@
+.mainPage {
+	background: var(--ol-colour-primary-dark);
+	overflow: hidden;
+	user-select: none;
+}
+
+.content {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.spinner {
+	transform: scale(1.8);
+}
+
+.welcomeText {
+	color: var(--ol-text-colour);
+	font-weight: 200;
+	font-style: italic;
+	font-size: 1.7rem;
+	padding-top: 2rem;
+}
+
+.report {
+	width: 13rem;
+	display: grid;
+	grid-template-columns: 0.3fr 1.2fr;
+	grid-template-rows: 1fr;
+	gap: 0px 0px;
+	grid-template-areas:
+	"logo text";
+	align-items: center;
+	position: absolute;
+	left: 50%;
+	bottom: 4.5rem;
+	transform: translateX(-50%);
+}
+
+.reportText {
+	color: var(--ol-text-colour);
+	font-style: normal;
+	font-size: 1rem;
+	grid-area: text; 
+}
+
+.infoFooter {
+	color: var(--ol-text-colour);
+	font-weight: 200;
+	font-size: 0.8rem;
+	position: fixed;
+	bottom: 0.3rem;
+	left: 0.8rem;
+	opacity: 0.2;
+}

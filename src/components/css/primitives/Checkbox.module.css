@@ -2,6 +2,9 @@
 	background: var(--ol-colour-tertiary-dark);
 	border: 0.15rem solid var(--ol-colour-not-selected);
 	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .checkbox:active {

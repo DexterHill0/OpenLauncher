@@ -1,15 +1,19 @@
-import { app, Menu, dialog, shell } from "electron";
+import { app, Menu, dialog, shell, MenuItem, remote } from "electron";
 import Discord from "./Discord";
 import Requests from "./Requests";
 import Notifications from "./Notification";
 import { Window } from "./Window";
 
-let mainWindow = null;
-let splashScreen = null;
+import contextMenu from "electron-context-menu";
+
+let mainWindow: Window = null;
+let splashScreen: Window = null;
+
+const isDevMode = app.commandLine.hasSwitch("dev");
 
 async function createWindow() {
 
-	//Menu.setApplicationMenu(null);
+	isDevMode ? null : Menu.setApplicationMenu(null);
 
 	mainWindow = new Window({
 		height: 920,
@@ -26,13 +30,13 @@ async function createWindow() {
 
 		webPreferences: {
 			nodeIntegration: true,
-			devTools: true, //--------false in build------------------
+			devTools: isDevMode,
 			enableRemoteModule: true,
 		}
 	});
 	mainWindow.init();
 	await mainWindow.loadURL();
-	//mainWindow.webContentsOn('will-navigate', e => e.preventDefault());
+	mainWindow.webContentsOn("will-navigate", e => e.preventDefault());
 
 	splashScreen = new Window({
 		height: 300,
@@ -41,7 +45,7 @@ async function createWindow() {
 
 		show: true,
 		frame: false,
-		backgroundColor: '#202020',
+		backgroundColor: "#202020",
 		movable: false,
 		minimizable: false,
 		maximizable: false,
@@ -54,7 +58,7 @@ async function createWindow() {
 	});
 	splashScreen.init();
 	await splashScreen.loadURL();
-	splashScreen.webContentsOn('will-navigate', e => e.preventDefault());
+	splashScreen.webContentsOn("will-navigate", e => e.preventDefault());
 
 	mainWindow.on(Window.events.DOCK_BOUNCE, () => {
 		app.dock.bounce("critical");
@@ -71,11 +75,17 @@ async function createWindow() {
 	splashScreen.destroy();
 	splashScreen = null;
 
+	addContextMenu();
+
 	mainWindow.show();
 
-	//--------------------Remove in build----------------------
-	mainWindow.devTools();
+	isDevMode ? mainWindow.devTools() : null;
+}
 
+function addContextMenu() {
+	contextMenu({
+		showInspectElement: isDevMode,
+	});
 }
 
 function setup() {
@@ -112,13 +122,13 @@ function checkForUpdates() {
 	});
 }
 
-app.on('window-all-closed', function () {
-	if (process.platform !== 'darwin') {
+app.on("window-all-closed", function () {
+	if (process.platform !== "darwin") {
 		app.quit();
 	}
 });
 
-app.on('activate', function () {
+app.on("activate", function () {
 	if (mainWindow === null && splashScreen === null) {
 		createWindow();
 	}
@@ -132,7 +142,7 @@ app.on('activate', function () {
 	}
 });
 
-app.on('ready', () => {
+app.on("ready", () => {
 	createWindow();
 	setup();
 });

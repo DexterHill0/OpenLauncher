@@ -1,5 +1,7 @@
 import React from "react";
-import { Help, Icon } from "./icons/Icons";
+
+import { IoHelp } from "react-icons/io5";
+import Icon from "./icons/Icon";
 
 import styles from "./css/InfoCircle.module.css";
 
@@ -11,11 +13,11 @@ interface Props {
 const InfoCircle: React.FC<Props> = (props) => {
 
 	return (
-		<div className={styles["tooltip"]}
+		<div className={styles.tooltip}
 			style={{ width: props.size || "1rem", height: props.size || "1rem" }}
 			ol-data-tooltip={props.tooltip}
 		>
-			<Icon icon={Help} strokeWidth="20px"></Icon>
+			<Icon icon={IoHelp} ></Icon>
 		</div>
 	)
 }

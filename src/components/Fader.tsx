@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from "react";
+import React, { useImperativeHandle, useState } from "react";
 
 interface Props {
 	startIndex?: number;
@@ -78,7 +78,6 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 						style={{
 							opacity: i === currentChild.child ? currentChild.direction : "0",
 							transition: `opacity ${props.fadeTime || 500}ms ease-in`,
-							position: "absolute",
 							height: "100%",
 							width: "100%",
 							display: "flex",

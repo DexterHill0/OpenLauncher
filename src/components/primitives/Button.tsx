@@ -15,7 +15,7 @@ interface Props {
 const Button: React.FC<Props> = (props) => {
 
 	const classNames = [
-		styles["button"],
+		styles.button,
 		styles[props.gradientType],
 		styles[(props.animateOnHover && !props.disabled) ? "animate" : ""],
 		props.class,

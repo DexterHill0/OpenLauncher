@@ -12,7 +12,7 @@ interface Props {
 const Item: React.FC<Props> = (props) => {
 
 	return (
-		<div className={styles["item"]}
+		<div className={styles.item}
 			style={{ background: props.background || "", }}
 		>
 			<div
@@ -21,7 +21,7 @@ const Item: React.FC<Props> = (props) => {
 			<div
 				style={{ paddingRight: props.end ? "0.7rem" : "" }}
 			>{props.middle}</div>
-			<div>{props.end}</div>
+			{props.end}
 		</div>
 	)
 }
