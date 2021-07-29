@@ -32,6 +32,7 @@ const ProgressBar: React.FC<Props> = (props) => {
 						background: `linear-gradient(${props.vertical ? "360deg" : "90deg"}, var(--ol-colour-red), var(--ol-colour-yellow))`,
 						borderRadius: props.rocket ? props.vertical ? "0 0 1rem 1rem" : "1rem 0 0 1rem" : "1rem",
 						bottom: props.vertical ? "0px" : "",
+						transition: `${props.vertical ? "height" : "width"} 2.2s ease-in-out`,
 					}}
 				>
 					{
@@ -43,7 +44,7 @@ const ProgressBar: React.FC<Props> = (props) => {
 									transform: `rotate(${props.vertical ? "-" : ""}45deg)`
 								}}
 							>
-								<Icon icon={IoRocketOutline} colour="var(--ol-colour-yellow)" strokeWeight="10px"></Icon>
+								<Icon icon={IoRocketOutline} colour="var(--ol-colour-yellow)" ></Icon>
 							</div> : <></>
 					}
 				</div>

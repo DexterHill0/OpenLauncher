@@ -1,0 +1,26 @@
+.steamText {
+	padding-bottom: 1rem;
+}
+
+.detailsForm {
+	display: flex;
+	flex-direction: column;
+}
+
+.detailsForm > * {
+	margin: 0.5rem 0rem 0.5rem 0rem;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.container > * {
+	margin-bottom: 1.5rem;
+}
+
+.separator {
+	margin-top: 1rem;
+}

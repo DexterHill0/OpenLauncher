@@ -1,17 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
-
-import Providers from "./Providers";
-
 import ReactModal from "react-modal";
+
+import { setupLogger } from "./scripts/Logger";
+import Providers from "./Providers";
 
 import App from "./App";
 
-const log = window.require("electron-log");
-log.transports.file.fileName = "main.log";
-log.transports.file.getFile().clear();
-log.transports.file.format = "[{h}:{i}:{s}] [{level} from {processType}] {text}";
+setupLogger();
 
 ReactModal.setAppElement("#root");
 

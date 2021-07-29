@@ -8,6 +8,12 @@
 	background-origin: border-box;
 	background-size: 200%;
 	box-shadow: 2px 10000px 1px var(--ol-colour-tertiary-dark) inset;
+	outline: none;
+	opacity: 1;
+}
+
+.button:active {
+	opacity: 0.8;
 }
 
 .dark {

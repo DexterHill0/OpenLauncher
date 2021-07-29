@@ -1,7 +1,3 @@
-/**
- * Adapated from RSA.js on Steam's login page
- */
-
 import { BigInteger } from "jsbn";
 
 class RSAPublicKey {

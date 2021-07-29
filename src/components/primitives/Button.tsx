@@ -7,6 +7,7 @@ interface Props {
 	height: string;
 	gradientType: "dark" | "light";
 	disabled?: boolean;
+	submit?: { formId: string }
 	animateOnHover?: boolean;
 	onClick?: (event: React.MouseEvent) => void;
 	class?: string;
@@ -25,10 +26,14 @@ const Button: React.FC<Props> = (props) => {
 		<button
 			onClick={(e) => (props.onClick && !props.disabled) && props.onClick(e)}
 
+			disabled={props.disabled}
+			type={props.submit ? "submit" : undefined}
+			form={props.submit?.formId}
+
 			style={{
 				width: props.width,
 				height: props.height,
-				opacity: props.disabled ? "0.7" : "auto",
+				opacity: props.disabled ? "0.7" : undefined,
 				cursor: props.disabled ? "not-allowed" : "pointer"
 			}}
 

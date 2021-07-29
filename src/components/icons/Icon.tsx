@@ -5,12 +5,12 @@ import { IconContext, IconType } from "react-icons";
 interface Props {
 	icon: IconType;
 	colour?: string;
-	strokeWeight?: string;
+	size?: string;
 }
 
 const Icon: React.FC<Props> = (props) => {
 	return (
-		<IconContext.Provider value={{ color: props.colour, size: "100%", attr: { strokeWidth: props.strokeWeight } }}>
+		<IconContext.Provider value={{ color: props.colour, size: props.size || "100%", }}>
 			<props.icon></props.icon>
 		</IconContext.Provider>
 	)

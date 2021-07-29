@@ -8,7 +8,7 @@ import styles from "../css/primitives/Checkbox.module.css";
 interface Props {
 	size: string;
 	startSelected?: boolean;
-	onClick?: (event: React.MouseEvent) => void;
+	onChecked?: (isChecked: boolean) => void;
 	class?: string;
 }
 
@@ -19,7 +19,7 @@ const Checkbox: React.FC<Props> = (props) => {
 	return (
 		<div className={[styles.checkbox, props.class].join(" ")}
 
-			onClick={(e) => { setIsChecked(!isChecked); props.onClick && props.onClick(e); }}
+			onClick={() => { setIsChecked(!isChecked); props.onChecked && props.onChecked(!isChecked); }}
 
 			style={{
 				width: props.size,

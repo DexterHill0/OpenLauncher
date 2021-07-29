@@ -1,42 +1,36 @@
 import React, { useEffect, useState } from "react";
 
-import DiscordRPC from "../../scripts/DiscordRPC";
-import openReportFilled from "../../utils/OpenNewReport";
-
 import { IoLogoGithub } from "react-icons/io5";
 import Icon from "../../components/icons/Icon";
-
 import LoadingSpinner from "../../components/LoadingSpinner";
+
+import DiscordRPC from "../../scripts/DiscordRPC";
+import openReportFilled from "../../utils/OpenNewReport";
+import Logger from "../../scripts/Logger";
 
 import styles from "../css/StartupPage.module.css"
 
-const log = window.require("electron-log");
 
 const StartupPage: React.FC = () => {
 
-	const [isFirstTime, setFirstTime] = useState(1);
+	const isFirstTime = false; //localStorage.getItem("isFirstLaunch") === "true";
 
 	useEffect(() => {
 		configure();
 	}, []);
 
 	const configure = () => {
-		log.log("OpenLauncher started");
+		Logger.log("OpenLauncher active!");
 
-		localStorage.setItem("isFirstLaunch", "") // debug
-
-		if (localStorage.getItem("isFirstLaunch") === "true") {
-			setFirstTime(0)
-		}
-		else {
+		if (isFirstTime) {
 			//window.location.href = "/setup/"
 			localStorage.setItem("isFirstLaunch", "true")
 		}
 
 		DiscordRPC.checkStatus().then(() => {
-			log.log("RPC active");
+			Logger.log("Discord RPC active");
 		}).catch(() => {
-			log.error("RPC failed to initialise!");
+			Logger.error("Discord RPC failed to initialise!");
 		});
 	}
 

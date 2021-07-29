@@ -23,9 +23,13 @@ NOTE: Please check the other issues to make sure the bug hasn't already been rep
 <!-- Please include the output of your log files. Screenshots can be added too -->
 
 <!-- Paste logs between the backticks -->
+<details>
+<summary>Log output</summary>
+
 \`\`\`
 ${fs.readFileSync(logFilePath)}
 \`\`\`
+</details>
 
 <!-- ***** -->
  - OS: ${navigator.platform}

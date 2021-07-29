@@ -1,0 +1,36 @@
+
+.container {
+	display: flex;
+}
+
+.inputBox {
+	background-color: var(--ol-colour-tertiary-dark);
+	color: var(--ol-text-colour);
+	border-radius: 0.5rem;
+	border: 2px solid var(--ol-colour-not-selected);
+	font: inherit;
+	outline: 0;
+	padding: 0.1rem 0rem 0.2rem 0.7rem;
+	width: 100%;
+}
+
+.label {
+	background-color: var(--ol-colour-secondary-dark);
+	border-bottom-left-radius: 0.5rem;
+	border-top-left-radius: 0.5rem;
+	border-style: solid;
+	border-color: var(--ol-colour-not-selected);
+	border-top-width: 2px;
+	border-left-width: 2px;
+	border-bottom-width: 2px;
+	border-right-width: 0px;
+	padding: 0.4% 1rem 0.4% 1rem;
+	width: 1.4rem;
+	display: flex;
+	align-items: center;
+	vertical-align: center;
+}
+
+.iconContainer {
+	height: 100%;
+}

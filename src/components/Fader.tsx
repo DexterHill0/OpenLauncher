@@ -12,7 +12,11 @@ export interface FaderProps {
 	fadeNext(): void;
 	fadePrev(): void;
 	fadeTo(index: number): void;
+	getCurrentIndex: () => number;
 }
+
+//Store the value globally so that it isnt reset to 0 when the component updates
+let nextChild = 0;
 
 export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 	const children = React.Children.toArray(props.children);
@@ -21,7 +25,6 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 		child: props.startIndex || 0,
 		direction: 1,
 	});
-	let nextChild = 0;
 
 	const fadeNext = (): void => {
 		if ((currentChild.child + 1) > children.length) return;
@@ -32,11 +35,12 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 			child: currentChild.child,
 			direction: +!currentChild.direction, // `!currentChild.direction` inverts the direction (becomes boolean), `+` converts it to a number
 		});
+
 		nextChild = currentChild.child + 1;
 	}
 
 	const fadePrev = (): void => {
-		if ((currentChild.child - 1) < children.length) return;
+		if ((currentChild.child - 1) < 0) return;
 
 		queueNextFade();
 
@@ -44,11 +48,12 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 			child: currentChild.child,
 			direction: +!currentChild.direction,
 		});
+
 		nextChild = currentChild.child - 1;
 	}
 
 	const fadeTo = (index: number): void => {
-		if (index < children.length || index > children.length) return;
+		if (index < 0 || index > children.length) return;
 
 		queueNextFade();
 
@@ -56,6 +61,7 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 			child: currentChild.child,
 			direction: +!currentChild.direction,
 		});
+
 		nextChild = index;
 	}
 
@@ -65,10 +71,14 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 				child: nextChild,
 				direction: +!currentChild.direction,
 			}));
-		}, props.fadeTime || 500)
+		}, props.fadeTime || 500);
 	}
 
-	useImperativeHandle(ref, () => ({ fadeNext, fadePrev, fadeTo }));
+	const getCurrentIndex = () => {
+		return nextChild;
+	}
+
+	useImperativeHandle(ref, () => ({ fadeNext, fadePrev, fadeTo, getCurrentIndex }));
 
 	return (
 		<div style={{ width: "100%", height: "100%" }}>
@@ -78,10 +88,11 @@ export const Fader = React.forwardRef<FaderProps, Props>((props, ref) => {
 						style={{
 							opacity: i === currentChild.child ? currentChild.direction : "0",
 							transition: `opacity ${props.fadeTime || 500}ms ease-in`,
+							position: "absolute",
 							height: "100%",
-							width: "100%",
 							display: "flex",
-							alignItems: "center"
+							alignItems: "center",
+							zIndex: i === currentChild.child ? 1 : -100,
 						}}
 					>
 						{child}

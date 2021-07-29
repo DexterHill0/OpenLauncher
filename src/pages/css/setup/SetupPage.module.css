@@ -35,7 +35,6 @@
 	z-index: 3;
 	grid-area: content;
 	display: flex; 
-	align-items: center;
 }
 
 .launchers {
@@ -83,4 +82,18 @@
 	right: -22%;
 	display: flex;
 	align-items: center;
+}
+
+.textContainer {
+	width: calc(100% - 75%);
+	top: 8%;
+	height: 1.8rem;
+	position: absolute;
+	display: flex;
+	justify-content: space-between;
+	z-index: 10;
+}
+
+.backText:active, .skipText:active {
+	opacity: 0.8;
 }
