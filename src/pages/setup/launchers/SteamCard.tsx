@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { toast } from "../../../providers/ToastProvider";
+import Requests from "../../../scripts/Requests";
 
 import Input from "../../../components/primitives/Input";
 import { IoLockClosedOutline, IoPersonOutline } from "react-icons/io5";
@@ -13,7 +14,6 @@ import Separator from "../../../components/Separator";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 import styles from "../../css/setup/launchers/SteamCard.module.css";
-
 
 const SteamCard: React.FC = () => {
 

@@ -1,10 +1,16 @@
-import { app, Menu, dialog, shell, MenuItem, remote } from "electron";
+import { app, Menu, dialog, shell } from "electron";
+import contextMenu from "electron-context-menu";
+import Logger from "electron-log";
+
 import Discord from "./Discord";
 import Requests from "./Requests";
 import Notifications from "./Notification";
 import { Window } from "./Window";
 
-import contextMenu from "electron-context-menu";
+//Log uncaught errors
+Logger.transports.file.format = "[{h}:{i}:{s}] [{level} from {processType}] {text}";
+process.on("uncaughtException", (err) => Logger.error(err));
+process.on("unhandledRejection", (err) => Logger.error(err));
 
 let mainWindow: Window = null;
 let splashScreen: Window = null;

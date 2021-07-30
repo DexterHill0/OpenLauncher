@@ -2,14 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import ReactModal from "react-modal";
+import settings from "electron-settings";
 
 import { setupLogger } from "./scripts/Logger";
 import Providers from "./Providers";
 
 import App from "./App";
 
+settings.configure({ fileName: "config" });
 setupLogger();
-
 ReactModal.setAppElement("#root");
 
 ReactDOM.render(

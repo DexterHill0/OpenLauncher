@@ -27,6 +27,10 @@ export class Window {
 		REQUESTS_POST: "OL-REQUESTS-POST",
 		REQUESTS_GET: "OL-REQUESTS-GET",
 		REQUEST_COMPLETE: "OL-REQUEST-COMPLETE",
+
+		REQUESTS_SESSION_CREATE: "OL-SESSION-CREATE",
+		REQUESTS_SESSION_SET_COOKIES: "OL-SESSION-SET-COOKIES",
+		REQUESTS_SESSION_GET_COOKIES: "OL-SESSION-GET-COOKIES",
 	}
 
 	activeEvents: { [key: string]: (...args: any[]) => void; }[];
@@ -95,6 +99,10 @@ export class Window {
 	devTools() {
 		this.checkInitialised();
 		this.window.webContents.openDevTools();
+	}
+
+	getWindow() {
+		return this.window;
 	}
 
 	private checkInitialised() {

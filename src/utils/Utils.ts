@@ -6,7 +6,7 @@ import $ from "jquery";
 export function getOS(): "win" | "osx" | "unsup-os" {
 	if (navigator.appVersion.indexOf("Win") !== -1) return "win";
 	if (navigator.appVersion.indexOf("Mac") !== -1) return "osx";
-	return "unsup-os"
+	return "unsup-os";
 }
 
 /**
@@ -22,6 +22,10 @@ export const Events = {
 	REQUESTS_POST: "OL-REQUESTS-POST",
 	REQUESTS_GET: "OL-REQUESTS-GET",
 	REQUEST_COMPLETE: "OL-REQUEST-COMPLETE",
+
+	REQUESTS_SESSION_CREATE: "OL-SESSION-CREATE",
+	REQUESTS_SESSION_SET_COOKIES: "OL-SESSION-SET-COOKIES",
+	REQUESTS_SESSION_GET_COOKIES: "OL-SESSION-GET-COOKIES",
 }
 
 /**

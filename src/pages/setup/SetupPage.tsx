@@ -12,15 +12,14 @@ import Icon from "../../components/icons/Icon";
 import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
 
 import { toast } from "../../providers/ToastProvider";
+import Logger from "../../scripts/Logger";
 
 import SteamCard from "./launchers/SteamCard";
-
-import Logger from "../../scripts/Logger";
 
 import styles from "../css/setup/SetupPage.module.css";
 
 
-let totalPages = 1;
+let totalPages = 2;
 
 const SetupPage = () => {
 	//"s" for Steam, "e" for Epic Games etc
@@ -62,7 +61,7 @@ const SetupPage = () => {
 
 	const setupRest = () => {
 		//Count the total number of pages
-		totalPages = 1 + (addAccounts ? Object.values(selected).filter(v => v).length : 0);
+		totalPages = 2 + (addAccounts ? Object.values(selected).filter(v => v).length : 0);
 
 		fadeNext();
 	}
@@ -93,7 +92,7 @@ const SetupPage = () => {
 						</div>
 					</div>
 
-					<Fader startIndex={0} ref={faderRef} fadeTime={1000}>
+					<Fader startIndex={1} ref={faderRef} fadeTime={1000}>
 						<div className={styles.launchers}>
 							<Text class={styles.launchersTitle} fontSize="2.2rem" fontWeight={200}>Select the launchers you'd like to use:</Text>
 							<div className={styles.launchersCheckboxes}>
