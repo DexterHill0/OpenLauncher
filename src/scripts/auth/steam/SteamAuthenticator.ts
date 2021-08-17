@@ -1,129 +1,119 @@
-import { RSA, RSAPublicKey } from "./Crypto";
+import { RSA } from "./Crypto";
 
 import Requests from "../../Requests";
 import { Endpoints } from "../../constants/Endpoints";
+import Logger from "../../Logger";
+import { SessionNames } from "../../constants/Sessions";
 
 enum Status {
-	"COMPLETE",
+	COMPLETE,
 
-	"CAPTCHA_REQUIRED",
-	"NEEDS_EMAIL_KEY",
+	CAPTCHA_REQUIRED,
+	EMAILAUTH_REQUIRED,
+	TWOFA_REQUIRED,
 
-	"INCORRECT_CAPTCHA",
-	"INCORRECT_EMAIL_KEY",
+	INCORRECT_US_OR_PW,
+	INCORRECT_CAPTCHA,
+	INCORRECT_EMAIL_KEY,
+	INCORRECT_2FA_CODE,
 
-	"POST_ERROR",
-	"SUCCESS_FALSE",
+	SUCCESS_FALSE,
 }
+
+export type Response = { status: Status, message: string }
+
+const returnStatus = (status: Status, message: string): Response => {
+	return { status: status, message: message };
+}
+
+const details = new Map();
 
 class SteamAuth {
-	data: { username: string; password: string; captchaData: { captchaText: string; captchagid: number; }; };
 
-	constructor() {
-		this.data = { username: "", password: "", captchaData: { captchaText: "", captchagid: -1 } };
-	}
+	static async signIn(username: string, password: string, verif?: { twofacode?: string, emailcode?: string, captchatext?: string }) {
+		details.set("username", username);
 
-	async signIn(username: string, password: string, captchaData: { captchaText: string, captchagid: number }, emailKey?: string): Promise<Status> {
+		const rsaData = await SteamAuth.getRSAData();
 
-		//As long as the username and password are not blank I can overwrite the previous data (or set new data)
-		if (username.length > 0) this.data.username = username;
-		if (password.length > 0) this.data.password = password;
+		if (rsaData.hasError || !rsaData.body.success) {
+			Logger.error(`Steam /login/getrsakey fail: ${rsaData.error}`);
 
-		//The user's entered captcha text is used in multiple requests so it must be stored
-		if (captchaData.captchaText.length > 0) {
-			this.data.captchaData.captchaText = captchaData.captchaText;
-			this.data.captchaData.captchagid = captchaData.captchagid;
+			return returnStatus(Status.SUCCESS_FALSE, "");
 		}
 
-		//`signIn` has to be called at least once with username and password not blank so that the data can be stored for later
-		if ((this.data.username.length === 0 || this.data.password.length === 0) && this.data.captchaData.captchaText.length === 0) {
-			return Status.SUCCESS_FALSE;
+		//Get the required RSA data from the request
+		const { timestamp, publickey_mod: mod, publickey_exp: exp } = rsaData.body;
+		const rsaKey = RSA.getPublicKey(mod, exp);
+
+		password = RSA.encrypt(password, rsaKey);
+
+		const data = {
+			donotcache: Date.now(),
+			username: details.get("username"),
+			password: password,
+			twofactorcode: verif?.twofacode,
+			emailauth: verif?.emailcode,
+			loginfriendlyname: "",
+			captchagid: details.get("captchagid"),
+			captcha_text: verif?.captchatext,
+			emailsteamid: details.get("emailsteamid"),
+			rsatimestamp: timestamp,
+			remember_login: true,
 		}
 
-        /**
-         * I do all those checks because if for instance the user is on the slide that they complete the captcha, I have no way of retrieving 
-         * the username and password they entered on the previous slide so I need it stored somewhere that I can access again.
-         * That's why this function has to be called first with a username and password first, before the username and password can be left blank
-         */
+		const resp = await Requests.post(Endpoints.STEAM_DOLOGIN, data, SessionNames.Steam);
 
-		const { status, key, timestamp } = await this.getRSAData(this.data.username);
-		if (status !== Status.COMPLETE) return status;
+		if (resp.hasError) {
+			Logger.error(`Steam /login/dologin/ fail: ${resp.error}`);
 
-
-		let encodedPassword = RSA.encrypt(this.data.username, key);
-		const LOGIN_DATA = {
-			"username": this.data.username,
-			"password": encodedPassword,
-			"emailauth": emailKey || "",
-			"loginfriendlyname": "",
-			"captchagid": this.data.captchaData.captchagid,
-			"captcha_text": this.data.captchaData.captchaText,
-			"emailsteamid": "",
-			"rsatimestamp": timestamp,
-			"remember_login": "true",
-			"donotcache": this.time(),
+			return returnStatus(Status.SUCCESS_FALSE, "");
 		}
 
-		console.log(LOGIN_DATA);
-
-		return await Requests.post(Endpoints.STEAM_DOLOGIN, LOGIN_DATA).then(resp => {
-			console.log(resp);
-			if (!resp.body.success && !resp.body.captcha_needed) {
-				return Status.SUCCESS_FALSE;
-			}
-			else if (resp.body.captcha_needed) {
-				this.data.captchaData.captchagid = resp.body.captcha_gid;
-				return Status.CAPTCHA_REQUIRED;
-			}
-
-			return Status.COMPLETE;
-		}).catch(_err => {
-			return Status.POST_ERROR;
-		});
-
-	}
-
-	private async getRSAData(username: string): Promise<any> {
-		const RSA_DATA = {
-			"username": username,
-			"donotcache": this.time(),
+		//Set the cookie for subsequent authorised requests
+		if (resp.headers?.setCookie?.steamLoginSecure) {
+			Requests.Session.setCookies(SessionNames.Steam, { name: "steamLoginSecure", value: resp.headers.setCookie.steamLoginSecure });
 		}
 
-		return await Requests.post(Endpoints.STEAM_RSA_KEY, RSA_DATA).then(resp => {
-			if (!resp.body.success && !resp.body.captcha_needed) {
-				return { status: Status.SUCCESS_FALSE };
-			}
-			else {
-				const key = this.constructKey(resp.body.publickey_mod, resp.body.publickey_exp);
+		//If the request was a success add the other cookies
+		if (resp.body.success) {
+			Logger.log("Steam login success!");
 
-				return { status: Status.COMPLETE, key: key, timestamp: resp.body.timestamp };
-			}
-		}).catch(_err => {
-			return { status: Status.POST_ERROR }
-		});
+			const mAuthName = `steamMachineAuth${resp.body.transfer_parameters.steamid}`;
+
+			Requests.Session.setCookies(SessionNames.Steam, { name: mAuthName, value: resp.body.transfer_parameters.token_secure, persist: true });
+			Requests.Session.setCookies(SessionNames.Steam, { name: "steamRememberLogin", value: resp.headers.setCookie.steamRememberLogin, persist: true });
+
+			return returnStatus(Status.COMPLETE, "");
+		}
+		else if (resp.body.emailauth_needed) {
+			//Storing the data to use in the next request
+			details.set("emailsteamid", resp.body.emailsteamid);
+
+			return returnStatus(Status.EMAILAUTH_REQUIRED, `Please enter the verification code that was sent to the email: ***${resp.body.emaildomain} .`);
+		}
+		else if (resp.body.captcha_needed) {
+			details.set("captchagid", resp.body.captchagid);
+
+			return returnStatus(Status.CAPTCHA_REQUIRED, "Please enter the text shown in the captcha image.");
+		}
+		else if (resp.body.requires_twofactor) {
+			return returnStatus(Status.TWOFA_REQUIRED, "Please enter the 2FA verification code that was sent to your phone.");
+		}
+		else {
+			return returnStatus(Status.INCORRECT_US_OR_PW, "Incorrect username or password.");
+		}
+
 	}
 
-	getCaptchaGid(): number {
-		return this.data.captchaData.captchagid;
-	}
+	private static getRSAData(): Promise<any> {
+		const data = {
+			donotcache: Date.now(),
+			username: details.get("username"),
+		}
 
-	async refreshCaptchaGid(): Promise<number> {
-		const CAPTCHA_DATA = { "donotcache": this.time() }
-
-		return await Requests.post(Endpoints.STEAM_REFRESH_CAPTCHA, CAPTCHA_DATA).then(res => {
-			this.data.captchaData.captchagid = res.body.gid;
-
-			return res.body.gid;
-		});
-	}
-
-	private time(): number {
-		return new Date().getTime();
-	}
-
-	private constructKey(mod: string, exp: string): RSAPublicKey {
-		return RSA.getPublicKey(mod, exp);
+		return Requests.post(Endpoints.STEAM_RSA_KEY, data);
 	}
 }
 
-export { SteamAuth, Status };
+export default SteamAuth;
+export { Status };

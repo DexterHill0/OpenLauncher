@@ -25,7 +25,8 @@ class Requests {
 			return prom;
 		}
 
-		static setCookies(sessionName: string, cookies: { name: string, value: string }): Promise<void> {
+		static setCookies(sessionName: string, cookies: { name: string, value: string, persist?: boolean }): Promise<void> {
+			//Logger.log(`Setting session: ${sessionName}'s cookies`);
 
 			const prom = new Promise<void>((resolve) => {
 				ipcRenderer.once(Events.REQUESTS_SESSION_SET_COOKIES, (_event: any) => resolve(undefined));
@@ -37,6 +38,8 @@ class Requests {
 		}
 
 		static getCookies(sessionName: string): Promise<any> {
+			//Logger.log(`Getting session: ${sessionName}'s cookies`);
+
 			const prom = new Promise<any>((resolve) => {
 				ipcRenderer.once(Events.REQUESTS_SESSION_GET_COOKIES, (_event: any, data: any) => {
 					resolve(data[0]);
@@ -49,7 +52,7 @@ class Requests {
 		}
 	}
 
-	static post(url: string, data: object): Promise<any> {
+	static post(url: string, data: object, sessionName?: string): Promise<any> {
 		Logger.log(`Senging POST request to: ${url}`);
 
 		const prom = new Promise<any>((resolve, reject) => {
@@ -69,7 +72,32 @@ class Requests {
 
 		});
 
-		ipcRenderer.send(Events.REQUESTS_POST, { url, data });
+		ipcRenderer.send(Events.REQUESTS_POST, { url, data, sessionName });
+
+		return prom;
+	}
+
+	static get(url: string, data: object, sessionName?: string): Promise<any> {
+		Logger.log(`Senging GET request to: ${url}`);
+
+		const prom = new Promise<any>((resolve, reject) => {
+
+			ipcRenderer.once(Events.REQUEST_COMPLETE, (_event: any, data: any) => {
+				data = data[0];
+
+				if (data.hasError) {
+					Logger.error(`Error while sending GET request: ${data.error}`);
+					reject(data.error);
+					return;
+				}
+
+				Logger.log("GET request complete!");
+				resolve(data);
+			});
+
+		});
+
+		ipcRenderer.send(Events.REQUESTS_GET, { url, data, sessionName });
 
 		return prom;
 	}

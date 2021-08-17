@@ -2,6 +2,7 @@ import { Session, session } from "electron";
 import FormData from "form-data";
 import fetch, { Response } from "electron-fetch";
 import Logger from "electron-log";
+import cookie from "cookie";
 
 import { Window } from "./Window";
 
@@ -42,15 +43,15 @@ class Requests {
 		const data = new FormData();
 
 		Object.keys(args.data).forEach(k => {
-			data.append(k, args.data[k] || ""); //Guards against `undefined`
+			data.append(k, args.data[k]?.toString() || ""); //Guards against `undefined`, converts values to strings
 		});
 
 		let response: Response;
-		const fetchSession = this.activeSessions.get(args.data.sessionName) || session.defaultSession;
+		const fetchSession = this.activeSessions.get(args.sessionName) || session.defaultSession;
 
 		fetch(args.url, {
 			method: method,
-			body: data,
+			[method === "POST" ? "body" : ""]: data,
 			session: fetchSession,
 		})
 			.then(resp => {
@@ -89,18 +90,35 @@ class Requests {
 
 		if (!args.sessionName || !args.cookies) return;
 
+		const time = new Date();
+
 		this.activeSessions.get(args.sessionName).cookies.set({
 			url: this.win.getWindow().webContents.getURL(),
+			//If the cookie is to be persistent, make it expire a long time from now
+			//Any cookies with an expiration date will be saved to disk
+			expirationDate: args.cookies.persist ? time.setFullYear(time.getFullYear() + 50) : undefined,
 			...args.cookies
 		}).then(() => {
 			this.win.emit(Window.events.REQUESTS_SESSION_SET_COOKIES);
 		}).catch(err => Logger.error(err));
+
+		//Flush cookies (write to disk)
+		this.activeSessions.get(args.sessionName).cookies.flushStore();
 	}
 
 	//Converts most of the response into an object `emit` can serialise
 	toSerialisableRequestData(resp: Response, body: any) {
 		const headers = {};
-		resp.headers.forEach((val, key) => headers[key] = val)
+		resp.headers.forEach((val, key) => {
+
+			//If the header is a cookie string, convert it to an object
+			if (key === "set-cookie") {
+				headers["setCookie"] = cookie.parse(val);
+				return;
+			}
+
+			headers[key] = val;
+		})
 
 		return {
 			"hasError": false,

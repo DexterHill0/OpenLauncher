@@ -41,7 +41,6 @@ async function createWindow() {
 		}
 	});
 	mainWindow.init();
-	await mainWindow.loadURL();
 	mainWindow.webContentsOn("will-navigate", e => e.preventDefault());
 
 	splashScreen = new Window({
@@ -70,16 +69,16 @@ async function createWindow() {
 		app.dock.bounce("critical");
 	});
 
-	mainWindow.emit(Window.events.UPDATE_CHECK_STARTED);
 	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, "CHECKING FOR UPDATES");
 
 	await checkForUpdates();
 
 	splashScreen.emit(Window.events.SPLASH_SCREEN_TEXT_CHANGE, "STARTING");
-	mainWindow.emit(Window.events.UPDATE_CHECK_FINISHED);
 
 	splashScreen.destroy();
 	splashScreen = null;
+
+	await mainWindow.loadURL();
 
 	addContextMenu();
 

@@ -29,6 +29,11 @@ export const Events = {
 }
 
 /**
+ * Generates a random hex string of length `size`
+ */
+export const randHexString = (size: number) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join("");
+
+/**
  * The full names of the launchers supported
  */
 export const SupportedLaunchersFull = ["Epic Games Launcher", "Steam"];
@@ -42,7 +47,7 @@ export const SupportedLaunchersShort = ["epic", "steam"];
  * 
  * OSX: `/Users/...`
  */
-export const userDirectory = window.require('os').homedir();
+export const userDirectory = window.require("os").homedir();
 
 /**
  * WINDOWS: `C:/Users/.../AppData`
